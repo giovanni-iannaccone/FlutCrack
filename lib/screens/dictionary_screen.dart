@@ -38,6 +38,8 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
           children: [
             TextField(
               controller: _wordListNewWordsController,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 hintText: 'Enter your new words',
