@@ -36,15 +36,21 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
         margin: const EdgeInsets.all(30.0),
         child: Column(
           children: [
-            TextField(
-              controller: _wordListNewWordsController,
-              keyboardType: TextInputType.multiline,
-              maxLines: null,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your new words',
+            ConstrainedBox(
+              constraints: const BoxConstraints(
+                maxHeight: 100,
+              ),
+              child: TextField(
+                controller: _wordListNewWordsController,
+                keyboardType: TextInputType.multiline,
+                maxLines: null,
+                decoration: const InputDecoration(
+                  border: OutlineInputBorder(),
+                  labelText: 'Enter your new words',
+                ),
               ),
             ),
+            
             ElevatedButton(
               onPressed: prepareAddToDictionary,
               child: const Text("Add to the standart wordlist"),

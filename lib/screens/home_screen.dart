@@ -65,7 +65,7 @@ class _HomeScreenState extends State<HomeScreen> {
               controller: _hashController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                hintText: 'Enter your hash',
+                labelText: 'Enter your hash',
               ),
             ),
             DropdownButton<String>(

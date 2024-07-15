@@ -78,6 +78,11 @@ We welcome contributions! Please follow these steps:
 4. Push your changes to your fork.
 5. Create a pull request to the main repository.
 
+### 🍃 Contributors
+<a href="https://github.com/giovanni-iannaccone/FlutCrack/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=giovanni-iannaccone/FlutCrack"  alt="FLutCrack Contributors"/>
+</a>
+
 ## ⚖ License
 This project is licensed under the GPL-3.0 License. See the LICENSE file for details.
 
@@ -85,9 +90,7 @@ This project is licensed under the GPL-3.0 License. See the LICENSE file for det
 - For any inquiries or support, please contact <a href="mailto:iannacconegiovanni444@gmail.com"> iannacconegiovanni444@gmail.com </a>.
 - Visit my site for more informations about me and my work <a href="https://giovanni-iannaccone.github.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccone.github.io </a>
 
-### 🍃 Contributors 
-<a href="https://github.com/giovanni-iannaccone/FlutCrack/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=giovanni-iannaccone/FlutCrack"  alt="FLutCrack Contributors"/>
-</a>
-
 # 📸 Screenshots
+
+
+🚀 Happy Hacking ... 
