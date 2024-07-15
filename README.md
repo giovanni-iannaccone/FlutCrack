@@ -83,6 +83,6 @@ This project is licensed under the GPL-3.0 License. See the LICENSE file for det
 
 ## ⚔ Contact
 - For any inquiries or support, please contact <a href="mailto:iannacconegiovanni444@gmail.com"> iannacconegiovanni444@gmail.com </a>.
-- Visit my site for more informations about me and my work <a href="https://giovanni-iannaccone.github.io" target=”_blank”> https://giovanni-iannaccone.github.io </a>
+- Visit my site for more informations about me and my work <a href="https://giovanni-iannaccone.github.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccone.github.io </a>
 
 # 📸 Screenshots
