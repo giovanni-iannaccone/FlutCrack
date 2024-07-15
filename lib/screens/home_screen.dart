@@ -16,7 +16,6 @@ class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _hashController;
   final List<String> hashAlgs = [
     'md5',
-    'base64',
     'sha-1',
     'sha-224',
     'sha-256',
@@ -27,18 +26,18 @@ class _HomeScreenState extends State<HomeScreen> {
   String _result = "";
   List<String> _wordList = [];
 
-  @override
-  void initState() {
-    super.initState();
-    _hashController = TextEditingController();
-  }
-
   Future<void> _initializeWordList(File filePath) async {
     List<String> wordList = await loadDictionary(filePath);
 
     setState(() {
       _wordList = wordList;
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _hashController = TextEditingController();
   }
 
   @override
@@ -121,14 +120,18 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void pickWordlist() async {
-    FilePickerResult? result = await FilePicker.platform.pickFiles(
-      type: FileType.custom,
-      allowedExtensions: ['txt'],
-    );
+    try {
+      FilePickerResult? result = await FilePicker.platform.pickFiles(
+        type: FileType.custom,
+        allowedExtensions: ['txt'],
+      );
 
-    if (result != null && result.files.isNotEmpty) {
-      File filePath = File(result.files.first.path!);
-      await _initializeWordList(filePath);
+      if (result != null && result.files.isNotEmpty) {
+        File filePath = File(result.files.first.path!);
+        await _initializeWordList(filePath);
+      }
+    } catch (e) {
+      return ;
     }
   }
 }

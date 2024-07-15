@@ -3,6 +3,17 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 
+Future<String> get _localPath async {
+  final directory = await getApplicationDocumentsDirectory();
+  return directory.path;
+}
+
+Future<File> get _localFile async {
+  final path = await _localPath;
+  return File('$path/wordlist.txt');
+}
+
+
 Future<void> addToDictionary(String newWords) async {
   final file = await _localFile;
   await file.writeAsString(newWords, mode: FileMode.append);
@@ -12,9 +23,6 @@ String calcHash(String word, String alg) {
   String hash;
 
   switch (alg) {
-    case 'base64':
-      hash = base64Decode(word).toString();
-      break;
     case 'sha-1':
       hash = sha1.convert(utf8.encode(word)).toString();
       break;
@@ -39,14 +47,13 @@ Future<void> clearDictionary() async {
   await file.writeAsString('');
 }
 
-Future<List<String>> loadDictionary(File? filePath) async {
+Future<List<String>> loadDictionary(File? specialFilePath) async {
   File file;
 
-  if (filePath == null) {
-    file = await _localFile;
-  } else {
-    file = filePath;
-  }
+  specialFilePath == null
+    ? file = await _localFile
+    : file = specialFilePath;
+  
   List<String> dictionary;
 
   try {
@@ -56,14 +63,4 @@ Future<List<String>> loadDictionary(File? filePath) async {
   }
 
   return dictionary;
-}
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/wordlist.txt');
 }

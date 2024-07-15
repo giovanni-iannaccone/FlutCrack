@@ -50,7 +50,6 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 ),
               ),
             ),
-            
             ElevatedButton(
               onPressed: prepareAddToDictionary,
               child: const Text("Add to the standart wordlist"),

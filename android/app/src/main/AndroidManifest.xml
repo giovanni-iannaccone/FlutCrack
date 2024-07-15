@@ -3,7 +3,7 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     
     <application
-        android:label="flut_crack"
+        android:label="FlutCrack"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

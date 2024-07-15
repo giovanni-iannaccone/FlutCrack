@@ -8,13 +8,12 @@ FlutCrack is a Flutter application designed to crack hashes by comparing them ag
 ## 📚 Features
 
 - Hash cracking using a predefined wordlist
-- Support for multiple hash algorithms and other formats:
+- Support for multiple hash algorithms:
   - MD5
   - SHA-1
   - SHA-224
   - SHA-256
   - SHA-512
-  - Base64
 - User-friendly interface with text input and dropdown selection for hash algorithms
 
 ## 👩‍💻 Installation
