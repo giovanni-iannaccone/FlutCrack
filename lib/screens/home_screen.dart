@@ -10,7 +10,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  TextEditingController _hashController = TextEditingController();
+  late TextEditingController _hashController;
   final List<String> hashAlgs = [
     'md5',
     'base64',
@@ -22,13 +22,20 @@ class _HomeScreenState extends State<HomeScreen> {
 
   String _dropdownValue = 'md5';
   String _result = "";
-
-  final List<String> _wordList = loadDictionary();
+  List<String> _wordList = [];
 
   @override
   void initState() {
     super.initState();
     _hashController = TextEditingController();
+    _initializeWordList();
+  }
+
+  Future<void> _initializeWordList() async {
+    List<String> wordList = await loadDictionary();
+    setState(() {
+      _wordList = wordList;
+    });
   }
 
   @override
@@ -48,35 +55,36 @@ class _HomeScreenState extends State<HomeScreen> {
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
       body: Container(
-          margin: const EdgeInsets.all(30.0),
-          child: Column(
-            children: [
-              TextField(
-                controller: _hashController,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  hintText: 'Enter your hash',
-                ),
+        margin: const EdgeInsets.all(30.0),
+        child: Column(
+          children: [
+            TextField(
+              controller: _hashController,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                hintText: 'Enter your hash',
               ),
-              DropdownButton(
-                items: hashAlgs.map((String items) {
-                  return DropdownMenuItem(
-                    value: items,
-                    child: Text(items),
-                  );
-                }).toList(),
-                onChanged: (String? newValue) {
-                  setState(() {
-                    _dropdownValue = newValue!;
-                  });
-                },
-                value: _dropdownValue,
-              ),
-              _result.isEmpty
-                  ? const Text("Enter a hash to start")
-                  : Text(_result),
-            ],
-          )),
+            ),
+            DropdownButton<String>(
+              items: hashAlgs.map((String item) {
+                return DropdownMenuItem<String>(
+                  value: item,
+                  child: Text(item),
+                );
+              }).toList(),
+              onChanged: (String? newValue) {
+                setState(() {
+                  _dropdownValue = newValue!;
+                });
+              },
+              value: _dropdownValue,
+            ),
+            _result.isEmpty
+                ? const Text("Enter a hash to start")
+                : Text(_result),
+          ],
+        ),
+      ),
       floatingActionButton: FloatingActionButton(
         onPressed: crack,
         child: const Icon(Icons.key_off),
@@ -95,7 +103,6 @@ class _HomeScreenState extends State<HomeScreen> {
         setState(() {
           _result = 'Match found: $word';
         });
-
         return;
       }
     }
