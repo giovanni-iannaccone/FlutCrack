@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flut_crack/utils.dart';
 import 'package:flut_crack/widgets/nav.dart';
+import 'package:file_picker/file_picker.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -28,11 +31,11 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     _hashController = TextEditingController();
-    _initializeWordList();
   }
 
-  Future<void> _initializeWordList() async {
-    List<String> wordList = await loadDictionary();
+  Future<void> _initializeWordList(File filePath) async {
+    List<String> wordList = await loadDictionary(filePath);
+
     setState(() {
       _wordList = wordList;
     });
@@ -82,6 +85,11 @@ class _HomeScreenState extends State<HomeScreen> {
             _result.isEmpty
                 ? const Text("Enter a hash to start")
                 : Text(_result),
+            const Spacer(),
+            TextButton(
+              onPressed: pickWordlist,
+              child: const Text("Pick a wordlist"),
+            ),
           ],
         ),
       ),
@@ -110,5 +118,17 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _result = 'No match found';
     });
+  }
+
+  void pickWordlist() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['txt'],
+    );
+
+    if (result != null && result.files.isNotEmpty) {
+      File filePath = File(result.files.first.path!);
+      await _initializeWordList(filePath);
+    }
   }
 }

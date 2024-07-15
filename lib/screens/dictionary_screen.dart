@@ -43,7 +43,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
                 hintText: 'Enter your new words',
               ),
             ),
-            TextButton(
+            ElevatedButton(
               onPressed: prepareAddToDictionary,
               child: const Text("Add to the standart wordlist"),
             ),

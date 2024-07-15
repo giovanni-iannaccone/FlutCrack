@@ -3,13 +3,11 @@ import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
 
-// Add a type annotation for the parameter and correct the file handling
 Future<void> addToDictionary(String newWords) async {
   final file = await _localFile;
   await file.writeAsString(newWords, mode: FileMode.append);
 }
 
-// Correct the type annotations and logic errors in hash calculation
 String calcHash(String word, String alg) {
   String hash;
 
@@ -36,15 +34,19 @@ String calcHash(String word, String alg) {
   return hash;
 }
 
-// Correct the file handling and potential null errors
 Future<void> clearDictionary() async {
   final file = await _localFile;
   await file.writeAsString('');
 }
 
-// Correct the type annotations and file handling
-Future<List<String>> loadDictionary() async {
-  final file = await _localFile;
+Future<List<String>> loadDictionary(File? filePath) async {
+  File file;
+
+  if (filePath == null) {
+    file = await _localFile;
+  } else {
+    file = filePath;
+  }
   List<String> dictionary;
 
   try {
@@ -56,13 +58,11 @@ Future<List<String>> loadDictionary() async {
   return dictionary;
 }
 
-// Correctly implement the _localPath function
 Future<String> get _localPath async {
   final directory = await getApplicationDocumentsDirectory();
   return directory.path;
 }
 
-// Correctly implement the _localFile function
 Future<File> get _localFile async {
   final path = await _localPath;
   return File('$path/wordlist.txt');
