@@ -51,6 +51,9 @@ flutter build apk --release
 This command will generate an APK file at build/app/outputs/flutter-apk/app-release.apk.
 
 ### 📱 Installing the APK on Your Phone
+#### 🎈 Easy way
+Download the last release
+#### 🐱‍👤 Cool way
 Connect your Android device to your computer via USB.
 Enable USB debugging on your Android device. You can find this option in Settings > Developer options. If Developer options is not visible, you may need to enable it by tapping Build number seven times in Settings > About phone.
 Copy the generated APK file (app-release.apk) to your device.
