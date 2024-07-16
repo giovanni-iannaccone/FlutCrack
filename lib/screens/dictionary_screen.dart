@@ -56,7 +56,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             ),
             const Spacer(),
             const TextButton(
-              onPressed: clearDictionary,
+              onPressed: FileStorage.clearDictionary,
               child: Text("Clear wordlist.txt"),
             )
           ],
@@ -67,7 +67,7 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
 
   void prepareAddToDictionary() {
     String newWords = _wordListNewWordsController.text;
-    addToDictionary(newWords);
+    FileStorage.writeNewWords(newWords);
 
     return;
   }

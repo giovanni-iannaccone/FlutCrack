@@ -2,22 +2,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:crypto/crypto.dart';
 import 'package:path_provider/path_provider.dart';
-
-Future<String> get _localPath async {
-  final directory = await getApplicationDocumentsDirectory();
-  return directory.path;
-}
-
-Future<File> get _localFile async {
-  final path = await _localPath;
-  return File('$path/wordlist.txt');
-}
-
-
-Future<void> addToDictionary(String newWords) async {
-  final file = await _localFile;
-  await file.writeAsString(newWords, mode: FileMode.append);
-}
+import 'package:permission_handler/permission_handler.dart';
 
 String calcHash(String word, String alg) {
   String hash;
@@ -42,25 +27,58 @@ String calcHash(String word, String alg) {
   return hash;
 }
 
-Future<void> clearDictionary() async {
-  final file = await _localFile;
-  await file.writeAsString('');
-}
+class FileStorage {
+  static Future<String> getExternalDocumentPath() async {
+    var status = await Permission.storage.status;
+    if (!status.isGranted) {
+      await Permission.storage.request();
+    }
 
-Future<List<String>> loadDictionary(File? specialFilePath) async {
-  File file;
+    Directory directory = Directory("");
+    if (Platform.isAndroid) {
+      directory =
+          Directory("/storage/emulated/0/Download");
+    } else {
+      directory = await getApplicationDocumentsDirectory();
+    }
 
-  specialFilePath == null
-    ? file = await _localFile
-    : file = specialFilePath;
-  
-  List<String> dictionary;
-
-  try {
-    dictionary = await file.readAsLines();
-  } catch (e) {
-    return [];
+    final exPath = directory.path;
+    await Directory(exPath).create(recursive: true);
+    return exPath;
   }
 
-  return dictionary;
+  static Future<String> get _localPath async {
+    final String directory = await getExternalDocumentPath();
+    return directory;
+  }
+
+  static Future<void> clearDictionary() async {
+    final path = await _localPath;
+    File file = File('$path/wordlist.txt');
+    await file.writeAsString('');
+  }
+
+  static Future<List<String>> loadDictionary(File? specialFilePath) async {
+    File file;
+
+    specialFilePath == null
+        ? file = File("$_localPath/wordlist.txt")
+        : file = specialFilePath;
+
+    List<String> dictionary;
+
+    try {
+      dictionary = await file.readAsLines();
+    } catch (e) {
+      return [];
+    }
+
+    return dictionary;
+  }
+
+  static Future<File> writeNewWords(String newWords) async {
+    final path = await _localPath;
+    File file = File('$path/wordlist.txt');
+    return file.writeAsString(newWords);
+  }
 }

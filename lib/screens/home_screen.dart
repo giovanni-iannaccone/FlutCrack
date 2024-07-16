@@ -27,7 +27,7 @@ class _HomeScreenState extends State<HomeScreen> {
   List<String> _wordList = [];
 
   Future<void> _initializeWordList(File filePath) async {
-    List<String> wordList = await loadDictionary(filePath);
+    List<String> wordList = await FileStorage.loadDictionary(filePath);
 
     setState(() {
       _wordList = wordList;
