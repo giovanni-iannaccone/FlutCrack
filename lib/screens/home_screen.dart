@@ -25,9 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
   String _dropdownValue = 'md5';
   String _result = "";
   List<String> _wordList = [];
+  int _tryiedWords = 0;
 
-  Future<void> _initializeWordList(File filePath) async {
-    List<String> wordList = await FileStorage.loadDictionary(filePath);
+  Future<void> _initializeWordList(File? filePath) async {
+    List<String> wordList;
+
+    filePath != null
+      ? wordList = await FileStorage.loadDictionary(filePath)
+      : wordList = await FileStorage.loadDictionary(File("/storage/emulated/0/Download/wordlist.txt"));
 
     setState(() {
       _wordList = wordList;
@@ -85,6 +90,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 ? const Text("Enter a hash to start")
                 : Text(_result),
             const Spacer(),
+            _tryiedWords == 0
+              ? const Text("")
+              : Text("$_tryiedWords words tryed"),
+
+            const Spacer(),
             TextButton(
               onPressed: pickWordlist,
               child: const Text("Pick a wordlist"),
@@ -99,15 +109,24 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
-  void crack() {
+  void crack() async {
     String targetHash = _hashController.text.trim();
     String wordHash;
 
+    if(_wordList.isEmpty) {
+      await _initializeWordList(null);
+    }
+
     for (String word in _wordList) {
       wordHash = calcHash(word, _dropdownValue);
+      
+      setState(() {
+        _tryiedWords += 1;
+      });
 
       if (wordHash == targetHash) {
         setState(() {
+          _tryiedWords = 0;
           _result = 'Match found: $word';
         });
         return;
@@ -115,6 +134,7 @@ class _HomeScreenState extends State<HomeScreen> {
     }
 
     setState(() {
+      _tryiedWords = 0;
       _result = 'No match found';
     });
   }

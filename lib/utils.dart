@@ -60,9 +60,10 @@ class FileStorage {
 
   static Future<List<String>> loadDictionary(File? specialFilePath) async {
     File file;
+    final path = await _localPath;
 
     specialFilePath == null
-        ? file = File("$_localPath/wordlist.txt")
+        ? file = File("$path/wordlist.txt")
         : file = specialFilePath;
 
     List<String> dictionary;
@@ -79,6 +80,6 @@ class FileStorage {
   static Future<File> writeNewWords(String newWords) async {
     final path = await _localPath;
     File file = File('$path/wordlist.txt');
-    return file.writeAsString(newWords);
+    return file.writeAsString(newWords, mode: FileMode.append);
   }
 }
