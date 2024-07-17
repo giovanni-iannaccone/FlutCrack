@@ -19,7 +19,9 @@ class _HomeScreenState extends State<HomeScreen> {
     'sha-1',
     'sha-224',
     'sha-256',
+    'sha-384',
     'sha-512',
+    'sha-512/224'
   ];
 
   String _dropdownValue = 'md5';
