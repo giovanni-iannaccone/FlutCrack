@@ -17,8 +17,14 @@ String calcHash(String word, String alg) {
     case 'sha-256':
       hash = sha256.convert(utf8.encode(word)).toString();
       break;
+    case 'sha-384':
+      hash = sha384.convert(utf8.encode(word)).toString();
+      break;
     case 'sha-512':
       hash = sha512.convert(utf8.encode(word)).toString();
+      break;
+     case 'sha-512/224':
+      hash = sha512224.convert(utf8.encode(word)).toString();
       break;
     default:
       hash = md5.convert(utf8.encode(word)).toString();
