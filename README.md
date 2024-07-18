@@ -56,7 +56,7 @@ This command will generate an APK file at build/app/outputs/flutter-apk/app-rele
 ### 📱 Installing the APK on Your Phone
 #### 🎈 Easy way
 Download the last release
-#### 🐱‍👤 Cool way
+#### 🧊 Cool way
 Connect your Android device to your computer via USB.
 Enable USB debugging on your Android device. You can find this option in Settings > Developer options. If Developer options is not visible, you may need to enable it by tapping Build number seven times in Settings > About phone.
 Copy the generated APK file (app-release.apk) to your device.
@@ -93,6 +93,10 @@ We welcome contributions! Please follow these steps:
   <img src="https://contrib.rocks/image?repo=giovanni-iannaccone/FlutCrack"  alt="FLutCrack Contributors"/>
 </a>
 
+## 🔭 Learn
+Flutter: https://docs.flutter.dev/cookbook </br>
+Hash cracking: https://tryhackme.com/r/room/cryptographyintro
+               
 ## ⚖ License
 This project is licensed under the GPL-3.0 License. See the LICENSE file for details.
 
@@ -101,7 +105,7 @@ This project is licensed under the GPL-3.0 License. See the LICENSE file for det
 - Visit my site for more informations about me and my work <a href="https://giovanni-iannaccone.gith
 ub.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccone.github.io </a>
 
-# 📸 Screenshots
+## 📸 Screenshots
 <div style="display: grid;">
   <img src="https://github.com/user-attachments/assets/d9e0c628-c761-48d9-8008-52472696a840" style="height: 500px;"/>
   <img src="https://github.com/user-attachments/assets/b19c67c6-fcb8-4ea0-b8cf-d2bdfad7212a" style="height: 500px;"/>
