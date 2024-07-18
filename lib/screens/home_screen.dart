@@ -15,14 +15,18 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _hashController;
   final List<String> hashAlgs = [
+    'Unknown',
     'md5',
     'sha-1',
     'sha-224',
     'sha-256',
+    'sha-384',
     'sha-512',
+    'sha-512/224',
+    'sha-512/256'
   ];
 
-  String _dropdownValue = 'md5';
+  String _dropdownValue = 'Unknown';
   String _result = "";
   List<String> _wordList = [];
   int _tryiedWords = 0;
@@ -110,32 +114,43 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void crack() async {
+    String algorithm;
     String targetHash = _hashController.text.trim();
     String wordHash;
+    String safeExecuterResult = await safeExecuter(_wordList, _dropdownValue, targetHash);
 
-    if(_wordList.isEmpty) {
+    if ( safeExecuterResult == "" ) {
       await _initializeWordList(null);
-    }
 
-    for (String word in _wordList) {
-      wordHash = calcHash(word, _dropdownValue);
-      
-      setState(() {
-        _tryiedWords += 1;
-      });
+    } else if ( safeExecuterResult == "Unable to identify the algorithm" ) {
+       _result = safeExecuterResult;
 
-      if (wordHash == targetHash) {
+    } else {
+      safeExecuterResult == "true"
+      ? algorithm = _dropdownValue
+      : algorithm = safeExecuterResult;
+
+      for (String word in _wordList) {
+        wordHash = calcHash(word, algorithm);
+        
         setState(() {
-          _tryiedWords = 0;
-          _result = 'Match found: $word';
+          _tryiedWords += 1;
         });
-        return;
+
+        if (wordHash == targetHash) {
+          setState(() {
+            _tryiedWords = 0;
+            _result = 'Match found: $word';
+          });
+          return;
+        }
       }
+
+      _result = 'No match found';
     }
 
     setState(() {
       _tryiedWords = 0;
-      _result = 'No match found';
     });
   }
 

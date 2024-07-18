@@ -6,25 +6,78 @@ import 'package:permission_handler/permission_handler.dart';
 
 String calcHash(String word, String alg) {
   String hash;
+  var bytes = utf8.encode(word);
 
   switch (alg) {
     case 'sha-1':
-      hash = sha1.convert(utf8.encode(word)).toString();
+      hash = sha1.convert(bytes).toString();
       break;
+
     case 'sha-224':
-      hash = sha224.convert(utf8.encode(word)).toString();
+      hash = sha224.convert(bytes).toString();
       break;
+
     case 'sha-256':
-      hash = sha256.convert(utf8.encode(word)).toString();
+      hash = sha256.convert(bytes).toString();
       break;
+
+    case 'sha-384':
+      hash = sha384.convert(bytes).toString();
+      break;
+
     case 'sha-512':
-      hash = sha512.convert(utf8.encode(word)).toString();
+      hash = sha512.convert(bytes).toString();
       break;
+
+    case 'sha-512/224':
+      hash = sha512224.convert(bytes).toString();
+      break;
+
+    case 'sha-512/256':
+      hash = sha512256.convert(bytes).toString();
+      break;
+
     default:
-      hash = md5.convert(utf8.encode(word)).toString();
+      hash = md5.convert(bytes).toString();
   }
 
   return hash;
+}
+
+String? hashIdentifier(String hash) {
+  int length = hash.length;
+  String? algorithm;
+
+  switch (length) {
+    case 32:
+      algorithm = 'md5';
+      break;
+    
+    case 40:
+      algorithm = 'sha-1';
+      break;
+    
+    case 56:
+      algorithm = 'sha-224';
+      break;
+    
+    case 64:
+      algorithm = 'sha-256';
+      break;
+
+    case 96:
+      algorithm = 'sha-384';
+      break;
+    
+    case 128:
+      algorithm = 'sha-512';
+      break;
+
+    default:
+      algorithm = null;
+  }
+
+  return algorithm;
 }
 
 class FileStorage {
@@ -82,4 +135,21 @@ class FileStorage {
     File file = File('$path/wordlist.txt');
     return file.writeAsString(newWords, mode: FileMode.append);
   }
+}
+
+Future<String> safeExecuter(List<String> wordList, String? algorithm, String hash) async {
+  if(wordList.isEmpty) {
+    return "";
+  }
+
+  if (algorithm == 'Unknown') {
+    algorithm = hashIdentifier(hash);
+    return algorithm!;
+  }
+
+  if(algorithm == null) {
+    return "Unable to identify the algorithm";
+  }
+
+  return "true";
 }
