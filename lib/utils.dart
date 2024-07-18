@@ -24,7 +24,6 @@ String calcHash(String word, String alg) {
     case 'sha-384':
       hash = sha384.convert(bytes).toString();
       break;
-
     case 'sha-512':
       hash = sha512.convert(bytes).toString();
       break;
@@ -36,7 +35,6 @@ String calcHash(String word, String alg) {
     case 'sha-512/256':
       hash = sha512256.convert(bytes).toString();
       break;
-
     default:
       hash = md5.convert(bytes).toString();
   }

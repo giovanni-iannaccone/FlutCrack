@@ -102,11 +102,11 @@ This project is licensed under the GPL-3.0 License. See the LICENSE file for det
 ub.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccone.github.io </a>
 
 # 📸 Screenshots
-
 <div style="display: grid;">
   <img src="https://github.com/user-attachments/assets/d9e0c628-c761-48d9-8008-52472696a840" style="height: 500px;"/>
   <img src="https://github.com/user-attachments/assets/b19c67c6-fcb8-4ea0-b8cf-d2bdfad7212a" style="height: 500px;"/>
   <img src="https://github.com/user-attachments/assets/9c656139-6a35-481e-a6eb-1e821f25fe15" style="height: 500px;"/>
 </div>
 
-🚀 Happy Hacking !!!
+
+🚀 Happy Hacking ... 

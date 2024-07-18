@@ -22,8 +22,6 @@ class _HomeScreenState extends State<HomeScreen> {
     'sha-256',
     'sha-384',
     'sha-512',
-    'sha-512/224',
-    'sha-512/256'
   ];
 
   String _dropdownValue = 'Unknown';
