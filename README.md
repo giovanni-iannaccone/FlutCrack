@@ -94,10 +94,6 @@ We welcome contributions! Please follow these steps:
   <img src="https://contrib.rocks/image?repo=giovanni-iannaccone/FlutCrack"  alt="FLutCrack Contributors"/>
 </a>
 
-## 🔭 Learn
-Flutter: https://docs.flutter.dev/cookbook </br>
-Hash cracking: https://tryhackme.com/r/room/cryptographyintro
-
 ## ⚖ License
 This project is licensed under the GPL-3.0 License. See the LICENSE file for details.
 
