@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flut_crack/widgets/nav.dart';
-import 'package:flut_crack/utils.dart';
+import 'package:flut_crack/utils/files_utils.dart';
 
 class DictionaryScreen extends StatefulWidget {
   const DictionaryScreen({super.key});
