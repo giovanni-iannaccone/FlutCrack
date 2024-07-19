@@ -17,6 +17,7 @@ FlutCrack is a Flutter application designed to crack hashes by comparing them ag
   - SHA-384
   - SHA-512
   - SHA-512/224
+  - SHA-512/256
 - User-friendly interface with text input and dropdown selection for hash algorithms
 
 ## 👩‍💻 Installation

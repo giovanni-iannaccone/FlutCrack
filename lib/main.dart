@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:flut_crack/screens/credits_screen.dart';
+import 'package:flut_crack/screens/aboutus_screen.dart';
 import 'package:flut_crack/screens/dictionary_screen.dart';
 import 'package:flut_crack/screens/home_screen.dart';
 
@@ -26,7 +26,7 @@ class FlutCrack extends StatelessWidget {
       routes: {
         routes.home: (context) => const HomeScreen(),
         routes.dictionary: (context) => const DictionaryScreen(),
-        routes.credits: (context) => const CreditsScreen()
+        routes.credits: (context) => const AboutUsScreen()
       },
     );
   }

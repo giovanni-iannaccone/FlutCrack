@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flut_crack/widgets/nav.dart';
 
-class CreditsScreen extends StatefulWidget {
-  const CreditsScreen({super.key});
+class AboutUsScreen extends StatefulWidget {
+  const AboutUsScreen({super.key});
 
   @override
-  State<CreditsScreen> createState() => _CreditsScreenState();
+  State<AboutUsScreen> createState() => _AboutUsScreenState();
 }
 
-class _CreditsScreenState extends State<CreditsScreen> {
+class _AboutUsScreenState extends State<AboutUsScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
