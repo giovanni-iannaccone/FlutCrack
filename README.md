@@ -109,9 +109,9 @@ ub.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccon
 
 ## 📸 Screenshots
 <div style="display: grid;">
-  <img src="https://github.com/user-attachments/assets/d9e0c628-c761-48d9-8008-52472696a840" style="height: 500px;"/>
-  <img src="https://github.com/user-attachments/assets/b19c67c6-fcb8-4ea0-b8cf-d2bdfad7212a" style="height: 500px;"/>
-  <img src="https://github.com/user-attachments/assets/9c656139-6a35-481e-a6eb-1e821f25fe15" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/a331e5d6-10c1-4b03-b4ef-f969d033407d" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/48553040-19d9-4651-b7b1-5aae4a326db2" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/a061db0d-77a1-4a0d-9a20-ae5d22b583df" style="height: 500px;"/>
 </div>
 
 
