@@ -12,7 +12,7 @@ class FileStorage {
     Directory directory = Directory("");
     if (Platform.isAndroid) {
       directory =
-          Directory("/data/user/0/com.example.flut_crack/files/wordlist.txt");
+          Directory("/data/user/0/com.example.flut_crack/files");
     } else {
       directory = await getApplicationDocumentsDirectory();
     }
