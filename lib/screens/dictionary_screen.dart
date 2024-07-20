@@ -29,36 +29,42 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
     return Scaffold(
       drawer: const NavDrawer(),
       appBar: AppBar(
-        title: const Text("FlutCrack"),
+        title: const Text("Dictionary Management"),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: Container(
-        margin: const EdgeInsets.all(30.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            ConstrainedBox(
-              constraints: const BoxConstraints(
-                maxHeight: 100,
-              ),
-              child: TextField(
-                controller: _wordListNewWordsController,
-                keyboardType: TextInputType.multiline,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  border: OutlineInputBorder(),
-                  labelText: 'Enter your new words',
-                ),
+            TextField(
+              controller: _wordListNewWordsController,
+              keyboardType: TextInputType.multiline,
+              maxLines: 4,
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Enter your new words',
+                prefixIcon: Icon(Icons.text_fields),
               ),
             ),
-            ElevatedButton(
+            const SizedBox(height: 16),
+            ElevatedButton.icon(
               onPressed: prepareAddToDictionary,
-              child: const Text("Add to the standart wordlist"),
+              icon: const Icon(Icons.add),
+              label: const Text("Add to the standard wordlist"),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 36),
+              ),
             ),
             const Spacer(),
-            const TextButton(
+            ElevatedButton.icon(
               onPressed: FileStorage.clearDictionary,
-              child: Text("Clear wordlist.txt"),
-            )
+              icon: const Icon(Icons.clear),
+              label: const Text("Clear wordlist.txt"),
+              style: ElevatedButton.styleFrom(
+                iconColor: Theme.of(context).colorScheme.error,
+                minimumSize: const Size(double.infinity, 36),
+              ),
+            ),
           ],
         ),
       ),
@@ -68,7 +74,8 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
   void prepareAddToDictionary() {
     String newWords = _wordListNewWordsController.text;
     FileStorage.writeNewWords(newWords);
-
-    return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("New words added to the dictionary")),
+    );
   }
 }

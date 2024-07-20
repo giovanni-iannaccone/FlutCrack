@@ -50,8 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initializeWordList(File? filePath) async {
     List<String> wordList = filePath != null
         ? await FileStorage.loadDictionary(filePath)
-        : await FileStorage.loadDictionary(
-            File("/storage/emulated/0/Download/wordlist.txt"));
+        : await FileStorage.loadDictionary(null);
 
     setState(() {
       _wordList = wordList;
@@ -90,8 +89,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    String safeExecutorResult =
-        await safeExecuter(_wordList, _dropdownValue, targetHash);
+    String safeExecutorResult = await safeExecuter(_wordList, _dropdownValue, targetHash);
 
     if (isAlgorithmUnknown(safeExecutorResult)) {
       _updateState(result: safeExecutorResult, triedWords: 0);
@@ -134,18 +132,25 @@ class _HomeScreenState extends State<HomeScreen> {
         title: const Text("FlutCrack"),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: Container(
-        margin: const EdgeInsets.all(30.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
               controller: _hashController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Enter your hash',
+                prefixIcon: Icon(Icons.lock),
               ),
             ),
-            DropdownButton<String>(
+            const SizedBox(height: 16),
+            DropdownButtonFormField<String>(
+              decoration: const InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Select Hash Algorithm',
+              ),
               items: hashAlgs.map((String item) {
                 return DropdownMenuItem<String>(
                   value: item,
@@ -159,21 +164,29 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               value: _dropdownValue,
             ),
-            _result.isEmpty
-                ? const Text("Enter a hash to start")
-                : Text(_result),
+            const SizedBox(height: 16),
+            _result.isEmpty 
+              ? const Text("Enter a hash to start", style: TextStyle(color: Colors.grey))
+              : Text(_result, style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
             const Spacer(),
-            _triedWords == 0
-                ? const Text("")
-                : Text("$_triedWords words tried"),
+            _triedWords == 0 
+              ? const SizedBox.shrink()
+              : Text("$_triedWords words tried", style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
             const Spacer(),
-            TextButton(onPressed: _pickWordlist, child: Text(_file)),
+            ElevatedButton.icon(
+              onPressed: _pickWordlist,
+              icon: const Icon(Icons.folder_open),
+              label: Text(_file),
+              style: ElevatedButton.styleFrom(
+                minimumSize: const Size(double.infinity, 20),
+              ),
+            ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: _crack,
-        child: const Icon(Icons.key_off),
+        child: const Icon(Icons.vpn_key),
       ),
     );
   }

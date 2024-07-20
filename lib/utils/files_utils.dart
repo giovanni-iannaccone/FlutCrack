@@ -12,7 +12,7 @@ class FileStorage {
     Directory directory = Directory("");
     if (Platform.isAndroid) {
       directory =
-          Directory("/data/user/0/com.example.flut_crack/files/wordlist.txt");
+          Directory("/data/user/0/com.example.flut_crack/files");
     } else {
       directory = await getApplicationDocumentsDirectory();
     }
@@ -29,7 +29,7 @@ class FileStorage {
 
   static Future<void> clearDictionary() async {
     final path = await _localPath;
-    File file = File('$path/wordlist.txt');
+    File file = File('$path/FlutCrackDictionary.txt');
     await file.writeAsString('');
   }
 
@@ -38,7 +38,7 @@ class FileStorage {
     final path = await _localPath;
 
     specialFilePath == null
-        ? file = File("$path/wordlist.txt")
+        ? file = File("$path/FlutCrackDictionary.txt")
         : file = specialFilePath;
 
     List<String> dictionary;
@@ -54,7 +54,7 @@ class FileStorage {
 
   static Future<File> writeNewWords(String newWords) async {
     final path = await _localPath;
-    File file = File('$path/wordlist.txt');
+    File file = File('$path/FlutCrackDictionary.txt');
     return file.writeAsString(newWords, mode: FileMode.append);
   }
 }

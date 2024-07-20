@@ -14,39 +14,45 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
     return Scaffold(
       drawer: const NavDrawer(),
       appBar: AppBar(
-        title: const Text("FlutCrack"),
+        title: const Text("About FlutCrack"),
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,
       ),
-      body: Container(
-        margin: const EdgeInsets.all(30.0),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ListTile(
+              leading: Icon(Icons.thumb_up, color: Theme.of(context).colorScheme.primary),
+              title: const Text("FlutCrack 1.1"),
+            ),
+            ListTile(
+              leading: Icon(Icons.person, color: Theme.of(context).colorScheme.primary),
+              title: const Text("Creator: Giovanni Iannaccone"),
+            ),
+            ListTile(
+              leading: Icon(Icons.balance, color: Theme.of(context).colorScheme.primary),
+              title: const Text("License: GPL-3.0"),
+            ),
+            ListTile(
+              leading: Icon(Icons.code, color: Theme.of(context).colorScheme.primary),
+              title: const Text("Source code:"),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Text(
+                "https://github.com/giovanni-iannaccone/FlutCrack",
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.secondary,
+                  decoration: TextDecoration.underline,
+                ),
+              ),
+            ),
 
-        child: const Column(children: [
-          Row(
-            children: [
-              Icon(Icons.thumb_up),
-              Text("\tFlutCrack 1.0"),
-            ],
-          ),
-          Row(
-            children: [
-              Icon(Icons.person),
-              Text("\tCreator: Giovanni Iannaccone"),
-            ],
-          ),
-          Row(
-            children: [
-              Icon(Icons.balance),
-              Text("\tLicense: GPL-3.0"),
-            ],
-          ),
-          Row(
-            children: [
-              Icon(Icons.code),
-              Text("\tSource code:"),
-            ],
-          ),
-          Text("https://github.com/giovanni-iannaccone/FlutCrack")
-        ]),
+            const Spacer(),
+            const Text("Thanks to all the Flutter development team. Happy hacking"),
+          ],
+        ),
       ),
     );
   }

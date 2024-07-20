@@ -79,7 +79,7 @@ You may need to allow installations from unknown sources. This can be done by go
 - [x] Hash identifying  
 - [x] Cleaner code
 - [ ] Salted hash ( maybe )
-- [ ] New UI
+- [x] New UI
 
 ## 🧩 Contributing
 We welcome contributions! Please follow these steps:
