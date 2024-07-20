@@ -5,8 +5,11 @@ import 'package:flutter/material.dart';
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
 
-  void navigateTo(String route, BuildContext context) {
-    Navigator.of(context).pushNamedAndRemoveUntil(route, (route) => false);
+  void navigateTo(String targetRoute, BuildContext context) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+        targetRoute,
+        (Route<dynamic> route) => route.settings.name == targetRoute,
+    );
   }
 
   @override

@@ -17,6 +17,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   late TextEditingController _hashController;
+  String _file = "Pick a wordlist";
   final List<String> hashAlgs = [
     'Unknown',
     'md5',
@@ -49,7 +50,8 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _initializeWordList(File? filePath) async {
     List<String> wordList = filePath != null
         ? await FileStorage.loadDictionary(filePath)
-        : await FileStorage.loadDictionary(File("/storage/emulated/0/Download/wordlist.txt"));
+        : await FileStorage.loadDictionary(
+            File("/storage/emulated/0/Download/wordlist.txt"));
 
     setState(() {
       _wordList = wordList;
@@ -64,7 +66,11 @@ class _HomeScreenState extends State<HomeScreen> {
       );
 
       if (result != null && result.files.isNotEmpty) {
-        File filePath = File(result.files.first.path!);
+        setState(() {
+          _file = result.files.first.path!;
+        });
+
+        File filePath = File(_file);
         await _initializeWordList(filePath);
       }
     } catch (e) {
@@ -74,7 +80,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Future<void> _crack() async {
     String targetHash = _hashController.text.trim();
-    
+
     if (_wordList.isEmpty) {
       await _initializeWordList(null);
     }
@@ -84,7 +90,8 @@ class _HomeScreenState extends State<HomeScreen> {
       return;
     }
 
-    String safeExecutorResult = await safeExecuter(_wordList, _dropdownValue, targetHash);
+    String safeExecutorResult =
+        await safeExecuter(_wordList, _dropdownValue, targetHash);
 
     if (isAlgorithmUnknown(safeExecutorResult)) {
       _updateState(result: safeExecutorResult, triedWords: 0);
@@ -152,14 +159,15 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               value: _dropdownValue,
             ),
-            _result.isEmpty ? const Text("Enter a hash to start") : Text(_result),
+            _result.isEmpty
+                ? const Text("Enter a hash to start")
+                : Text(_result),
             const Spacer(),
-            _triedWords == 0 ? const Text("") : Text("$_triedWords words tried"),
+            _triedWords == 0
+                ? const Text("")
+                : Text("$_triedWords words tried"),
             const Spacer(),
-            TextButton(
-              onPressed: _pickWordlist,
-              child: const Text("Pick a wordlist"),
-            ),
+            TextButton(onPressed: _pickWordlist, child: Text(_file)),
           ],
         ),
       ),
