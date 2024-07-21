@@ -1,14 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flut_crack/widgets/nav.dart';
 
-class AboutUsScreen extends StatefulWidget {
+class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
-
-  @override
-  State<AboutUsScreen> createState() => _AboutUsScreenState();
-}
-
-class _AboutUsScreenState extends State<AboutUsScreen> {
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,7 +18,10 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             ListTile(
-              leading: Icon(Icons.thumb_up, color: Theme.of(context).colorScheme.primary),
+              leading: Icon(
+                Icons.thumb_up, 
+                color: Theme.of(context).colorScheme.primary
+              ),
               title: const Text("FlutCrack 1.1"),
             ),
             ListTile(
@@ -48,7 +46,6 @@ class _AboutUsScreenState extends State<AboutUsScreen> {
                 ),
               ),
             ),
-
             const Spacer(),
             const Text("Thanks to all the Flutter development team. Happy hacking"),
           ],
