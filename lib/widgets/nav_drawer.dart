@@ -1,16 +1,10 @@
 import 'package:flut_crack/app_routes.dart' as routes;
+import 'package:flut_crack/utils/navigation_utils.dart' show navigateTo;
 
 import 'package:flutter/material.dart';
 
 class NavDrawer extends StatelessWidget {
   const NavDrawer({super.key});
-
-  void navigateTo(String targetRoute, BuildContext context) {
-    Navigator.of(context).pushNamedAndRemoveUntil(
-        targetRoute,
-        (Route<dynamic> route) => route.settings.name == targetRoute,
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,29 +15,26 @@ class NavDrawer extends StatelessWidget {
           const DrawerHeader(
             child: Text(
               'Welcome',
-              style: TextStyle(color: Colors.white, fontSize: 25),
+              style: TextStyle(
+                color: Colors.white, 
+                fontSize: 25
+              ),
             ),
           ),
           ListTile(
             leading: const Icon(Icons.home),
             title: const Text('Home'),
-            onTap: () => {
-              navigateTo(routes.home, context),
-            },
+            onTap: () => navigateTo(context, routes.home),
           ),
           ListTile(
             leading: const Icon(Icons.bookmark_added),
             title: const Text('Wordlists'),
-            onTap: () => {
-              navigateTo(routes.dictionary, context),
-            },
+            onTap: () => navigateTo(context, routes.dictionary),
           ),
           ListTile(
             leading: const Icon(Icons.question_mark),
             title: const Text('About Us'),
-            onTap: () => {
-              navigateTo(routes.credits, context),
-            },
+            onTap: () => navigateTo(context, routes.credits),
           ),
         ],
       ),

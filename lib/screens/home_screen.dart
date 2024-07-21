@@ -1,134 +1,135 @@
 import 'dart:io';
 
+import 'package:flut_crack/data/algorithm_type.dart';
+import 'package:flut_crack/screens/providers/home_screen_state_notifier.dart';
+import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
+import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar;
+import 'package:flut_crack/utils/theme_utils.dart' show colorSchemeOf;
 import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
-import 'package:flut_crack/utils/checks_utils.dart';
-import 'package:flut_crack/utils/files_utils.dart';
-import 'package:flut_crack/utils/hash_utils.dart';
-import 'package:flut_crack/widgets/nav.dart';
+import 'package:flut_crack/widgets/nav_drawer.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:permission_handler/permission_handler.dart';
 
-class HomeScreen extends StatefulWidget {
+
+class HomeScreen extends HookConsumerWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
+  Future<void> _pickWordlistFile({
+    required void Function(PlatformFile) onSuccess,
+    required void Function(String error) onError,
+  }) async {
 
-class _HomeScreenState extends State<HomeScreen> {
-  late TextEditingController _hashController;
-  String _file = "Pick a wordlist";
-  final List<String> hashAlgs = [
-    'Unknown',
-    'md5',
-    'sha-1',
-    'sha-224',
-    'sha-256',
-    'sha-384',
-    'sha-512',
-    'sha-512/224',
-    'sha-512/256'
-  ];
-
-  String _dropdownValue = 'Unknown';
-  String _result = "";
-  List<String> _wordList = [];
-  int _triedWords = 0;
-
-  @override
-  void initState() {
-    super.initState();
-    _hashController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _hashController.dispose();
-    super.dispose();
-  }
-
-  Future<void> _initializeWordList(File? filePath) async {
-    List<String> wordList = await FileStorage.loadDictionary(filePath);
-
-    setState(() {
-      _wordList = wordList;
-    });
-  }
-
-  Future<void> _pickWordlist() async {
     try {
       FilePickerResult? result = await FilePicker.platform.pickFiles(
         type: FileType.custom,
         allowedExtensions: ['txt'],
       );
 
-      if (result != null && result.files.isNotEmpty) {
-        setState(() {
-          _file = result.files.first.path!;
-        });
-
-        File filePath = File(_file);
-        await _initializeWordList(filePath);
-      }
-    } catch (e) {
-      return;
-    }
-  }
-
-  Future<void> _crack() async {
-    String targetHash = _hashController.text.trim();
-
-    if (_wordList.isEmpty) {
-      await _initializeWordList(null);
-    }
-
-    if (_wordList.isEmpty) {
-      _updateState(result: 'Wordlist is empty', triedWords: 0);
-      return;
-    }
-
-    String safeExecutorResult = await safeExecuter(_wordList, _dropdownValue, targetHash);
-
-    if (isAlgorithmUnknown(safeExecutorResult)) {
-      _updateState(result: safeExecutorResult, triedWords: 0);
-      return;
-    }
-
-    String algorithm = determineAlgorithm(safeExecutorResult, _dropdownValue);
-    await _performCracking(targetHash, algorithm);
-  }
-
-  Future<void> _performCracking(String targetHash, String algorithm) async {
-    for (String word in _wordList) {
-      String wordHash = calcHash(word, algorithm);
-
-      if (wordHash == targetHash) {
-        _updateState(result: 'Match found: $word', triedWords: 0);
+      if(result == null){
         return;
       }
 
-      setState(() {
-        _triedWords += 1;
-      });
+      if (result.files.isNotEmpty) {
+        onSuccess(result.files.first);
+      } else {
+        onError("An error occured during file picking!");
+      }
+    } on Exception catch(ex) {
+      onError(ex.toString());
     }
-
-    _updateState(result: 'No match found', triedWords: 0);
   }
 
-  void _updateState({required String result, required int triedWords}) {
-    setState(() {
-      _result = result;
-      _triedWords = triedWords;
-    });
+  List<DropdownMenuItem<AlgorithmType>> _buildDropdownMenuItesm(){
+    return AlgorithmType.values.map((AlgorithmType item) {
+      return DropdownMenuItem<AlgorithmType>(
+        value: item,
+        child: Text(item.formattedName),
+      );
+    }).toList();
+  }
+
+  Widget _renderCrackingResult(BuildContext context, HomeState state){
+
+    if(state.isLoading){
+      return const Center(
+        child: CircularProgressIndicator(),
+      );
+    }
+
+    final colorScheme = colorSchemeOf(context);
+    final result = state.result;
+
+    if(result != null){
+      return Column(
+        children: [
+          Text(
+            result.success
+              ? result.matchedWord!
+              : "Word not present in the selected wordlist", 
+            style: TextStyle(
+              color: colorScheme.secondary
+            )
+          ),
+          Text(
+            "Tried ${result.triedWordsCount} words.",
+            style: TextStyle(
+              color: colorScheme.secondary
+            )
+          )
+        ]
+      );
+    } else {
+      return const Text(
+        "Enter a hash to start", 
+        style: TextStyle(
+          color: Colors.grey
+        )
+      );
+    }
+  }
+
+  Future<void> _requestPermissions({
+    required Permission permission,
+    required void Function() onGranted,
+    required void Function() onDenied,
+  }) async{
+
+    if(await permission.isPermanentlyDenied){
+      await openAppSettings();
+    }
+
+    if(await permission.isGranted){
+      onGranted();
+      return;
+    } else {
+      final status = await permission.status;
+      
+      status.isGranted
+        ? onGranted()
+        : onDenied();
+    }
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+
+    final colorScheme = colorSchemeOf(context);
+
+    final hashTextController = useTextEditingController();
+    final selectedAlgorithm = useState(AlgorithmType.unknown);
+    final pickedFilePath = useState<String?>(null);
+
+    final notifier = ref.read(homeStateStateNotifier.notifier);
+    final state = ref.watch(homeStateStateNotifier);
+
     return Scaffold(
       drawer: const NavDrawer(),
       appBar: AppBar(
         title: const Text("FlutCrack"),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: colorScheme.primaryContainer,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -136,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             TextField(
-              controller: _hashController,
+              controller: hashTextController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Enter your hash',
@@ -144,46 +145,53 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<String>(
+            DropdownButtonFormField<AlgorithmType>(
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
                 labelText: 'Select Hash Algorithm',
               ),
-              items: hashAlgs.map((String item) {
-                return DropdownMenuItem<String>(
-                  value: item,
-                  child: Text(item),
-                );
-              }).toList(),
-              onChanged: (String? newValue) {
-                setState(() {
-                  _dropdownValue = newValue!;
-                });
-              },
-              value: _dropdownValue,
+              items: _buildDropdownMenuItesm(),
+              onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
+              value: selectedAlgorithm.value,
             ),
             const SizedBox(height: 16),
-            _result.isEmpty 
-              ? const Text("Enter a hash to start", style: TextStyle(color: Colors.grey))
-              : Text(_result, style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
-            const Spacer(),
-            _triedWords == 0 
-              ? const SizedBox.shrink()
-              : Text("$_triedWords words tried", style: TextStyle(color: Theme.of(context).colorScheme.secondary)),
+            _renderCrackingResult(context, state),
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: _pickWordlist,
+              onPressed: () => _pickWordlistFile(
+                onSuccess: (platformFile) => pickedFilePath.value = platformFile.path,
+                onError: (error) => showErrorSnackBar(context, error)
+              ),
               icon: const Icon(Icons.folder_open),
-              label: Text(_file),
+              label: Text(pickedFilePath.value ?? "Pick a wordlist"),
               style: ElevatedButton.styleFrom(
-                minimumSize: const Size(double.infinity, 20),
+                padding: const EdgeInsets.all(20),
               ),
             ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: _crack,
+        onPressed: () => _requestPermissions(
+          permission: Permission.storage,
+          onGranted: () async {
+            if(selectedAlgorithm.value == AlgorithmType.unknown){
+              showErrorSnackBar(context, "Please select a valid hashing algorithm.");
+              return;
+            }
+
+            File? path = pickedFilePath.value != null
+              ? File(pickedFilePath.value!)
+              : null;
+
+            final wordList = await ref.read(wordListManagerProvider).loadWordList(path);
+            await notifier.crack(hashTextController.text, wordList, selectedAlgorithm.value);
+          },
+          onDenied: () => showErrorSnackBar(
+            context,
+            "Without storage permission can't load an external wordlist."
+          )
+        ),
         child: const Icon(Icons.vpn_key),
       ),
     );

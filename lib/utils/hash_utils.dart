@@ -1,90 +1,22 @@
 import 'dart:convert';
-import 'package:crypto/crypto.dart';
+import 'package:crypto/crypto.dart' as crypto;
+import 'package:flut_crack/data/algorithm_type.dart';
 
-String calcHash(String word, String alg) {
-  String hash;
-  var bytes = utf8.encode(word);
+String calculateHash(String word, AlgorithmType alg) {
 
-  switch (alg) {
-    case 'sha-1':
-      hash = sha1.convert(bytes).toString();
-      break;
+  final bytes = utf8.encode(word);
 
-    case 'sha-224':
-      hash = sha224.convert(bytes).toString();
-      break;
+  const algorithmTypeAlgorithmTypeToFunctionMap = {
+    AlgorithmType.md5: crypto.md5,
+    AlgorithmType.sha1: crypto.sha1,
+    AlgorithmType.sha224: crypto.sha224,
+    AlgorithmType.sha256: crypto.sha256,
+    AlgorithmType.sha384: crypto.sha384,
+    AlgorithmType.sha512: crypto.sha512,
+    AlgorithmType.sha512224: crypto.sha512224,
+    AlgorithmType.sha512256: crypto.sha512256
+  };
 
-    case 'sha-256':
-      hash = sha256.convert(bytes).toString();
-      break;
-
-    case 'sha-384':
-      hash = sha384.convert(bytes).toString();
-      break;
-    case 'sha-512':
-      hash = sha512.convert(bytes).toString();
-      break;
-
-    case 'sha-512/224':
-      hash = sha512224.convert(bytes).toString();
-      break;
-
-    case 'sha-512/256':
-      hash = sha512256.convert(bytes).toString();
-      break;
-
-    default:
-      hash = md5.convert(bytes).toString();
-  }
-
-  return hash;
-}
-
-String? hashIdentifier(String hash) {
-  String? algorithm;
-
-  switch (hash.length) {
-    case 32:
-      algorithm = 'md5';
-      break;
-    
-    case 40:
-      algorithm = 'sha-1';
-      break;
-    
-    case 56:
-      algorithm = 'sha-224';
-      break;
-    
-    case 64:
-      algorithm = 'sha-256';
-      break;
-
-    case 96:
-      algorithm = 'sha-384';
-      break;
-    
-    case 128:
-      algorithm = 'sha-512';
-      break;
-
-    default:
-      algorithm = null;
-  }
-
-  return algorithm;
-}
-
-Future<String> safeExecuter(List<String> wordList, String? algorithm, String hash) async {
-  if(wordList.isEmpty) {
-    return "";
-  }
-
-  if (algorithm == 'Unknown') {
-    algorithm = hashIdentifier(hash);
-    return algorithm ?? "Unable to identify the algorithm";
-  }
-
-  return "true";
+  return algorithmTypeAlgorithmTypeToFunctionMap[alg]!.convert(bytes).toString();
 }
 

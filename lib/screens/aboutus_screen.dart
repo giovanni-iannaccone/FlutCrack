@@ -1,6 +1,6 @@
 import 'package:flut_crack/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flut_crack/widgets/nav.dart';
+import 'package:flut_crack/widgets/nav_drawer.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
