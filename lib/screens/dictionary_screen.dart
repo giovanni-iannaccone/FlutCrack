@@ -1,54 +1,56 @@
+import'package:flut_crack/screens/providers/word_list_manager_provider.dart';
+import 'package:flut_crack/utils/theme_utils.dart' show colorSchemeOf;
+import 'package:flut_crack/utils/snackbar_utils.dart' show showSnackBar;
 import 'package:flutter/material.dart';
-import 'package:flut_crack/widgets/nav.dart';
-import 'package:flut_crack/utils/files_utils.dart';
+import 'package:flut_crack/widgets/nav_drawer.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
-class DictionaryScreen extends StatefulWidget {
+class DictionaryScreen extends HookConsumerWidget {
   const DictionaryScreen({super.key});
 
   @override
-  State<DictionaryScreen> createState() => _DictionaryScreenState();
-}
+  Widget build(BuildContext context, WidgetRef ref) {
 
-class _DictionaryScreenState extends State<DictionaryScreen> {
-  TextEditingController _wordListNewWordsController = TextEditingController();
+    final colorScheme = colorSchemeOf(context);
+    final wordsTextController = useTextEditingController();
+    final wordListManger = ref.watch(wordListManagerProvider);
 
-  @override
-  void initState() {
-    super.initState();
-    _wordListNewWordsController = TextEditingController();
-  }
-
-  @override
-  void dispose() {
-    _wordListNewWordsController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
     return Scaffold(
       drawer: const NavDrawer(),
       appBar: AppBar(
         title: const Text("Dictionary Management"),
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: colorScheme.primaryContainer,
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
-              controller: _wordListNewWordsController,
+              controller: wordsTextController,
               keyboardType: TextInputType.multiline,
               maxLines: 4,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Enter your new words',
+                labelText: 'Enter your new words (separated by space or comma)',
                 prefixIcon: Icon(Icons.text_fields),
               ),
             ),
             const SizedBox(height: 16),
             ElevatedButton.icon(
-              onPressed: prepareAddToDictionary,
+              onPressed: () async {
+                final words = wordsTextController.text
+                  .split(RegExp("\\s+|\\s*,\\s*"))
+                  .map((word) => word.trim())
+                  .toList();
+
+                await wordListManger.addWordsToDefaultWordList(words);
+                wordsTextController.text = '';
+
+                if(context.mounted){
+                  showSnackBar(context, "Wordlist updated.");
+                }
+              },
               icon: const Icon(Icons.add),
               label: const Text("Add to the standard wordlist"),
               style: ElevatedButton.styleFrom(
@@ -57,25 +59,22 @@ class _DictionaryScreenState extends State<DictionaryScreen> {
             ),
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: FileStorage.clearDictionary,
+              onPressed: () async {
+                await wordListManger.clearDefaultWordList();
+
+                if(context.mounted) {
+                  showSnackBar(context, "Wordlist emptied.");
+                }
+              },
               icon: const Icon(Icons.clear),
-              label: const Text("Clear wordlist.txt"),
+              label: const Text("Clear the standard wordlist."),
               style: ElevatedButton.styleFrom(
-                iconColor: Theme.of(context).colorScheme.error,
-                minimumSize: const Size(double.infinity, 36),
+                iconColor: colorScheme.error
               ),
             ),
           ],
         ),
       ),
-    );
-  }
-
-  void prepareAddToDictionary() {
-    String newWords = _wordListNewWordsController.text;
-    FileStorage.writeNewWords(newWords);
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text("New words added to the dictionary")),
     );
   }
 }
