@@ -9,22 +9,23 @@ class WordListManager {
     return directory.path;
   } 
 
-  Future<void> clearDefaultWordList() async {
+  Future<File> get _localFile async {
     final path = await _localPath;
-    File file = File('$path/FlutCrackDictionary.txt');
-    await file.writeAsString('');
+    return File("$path/$defaultDictionaryName");
+  }
+
+  Future<void> clearDefaultWordList() async {
+    final file = await _localFile;
+    file.writeAsString('');
   }
 
   Future<List<String>> loadWordList([File? dictionaryPath]) async {
-    final path = await _localPath;
-    final file = dictionaryPath ?? File("$path/$defaultDictionaryName");
-
+    final file = dictionaryPath ?? await _localFile;
     return await file.readAsLines();
   }
 
   Future<void> addWordsToDefaultWordList(List<String> words) async {
-    final path = await _localPath;
-    File file = File("$path/$defaultDictionaryName");
+    final file = await _localFile;
     file.writeAsString(words.join('\n'), mode: FileMode.append);
   }
 }
