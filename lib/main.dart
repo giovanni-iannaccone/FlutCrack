@@ -23,6 +23,7 @@ class FlutCrack extends StatelessWidget {
   Widget build(BuildContext context) {
    return MaterialApp(
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.dark,

@@ -30,5 +30,5 @@ AlgorithmType hashIdentifying(String hash) {
     128: AlgorithmType.sha512,
   };
 
-  return algorithmLengthToTypeMap[hash.length]!;
+  return algorithmLengthToTypeMap[hash.length] ?? AlgorithmType.unknown;
 }

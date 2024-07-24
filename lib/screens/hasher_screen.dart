@@ -45,9 +45,12 @@ class HasherScreen extends HookConsumerWidget {
             const SizedBox(height: 32),
             if (result.value != null) ResultCard(
               title: result.value!,
-              onCopyPressed: (){
-                Clipboard.setData(ClipboardData(text: result.value!));
-                showSnackBar(context, "Hash copied into clipboard.");
+              onCopyPressed: () async {
+                await Clipboard.setData(ClipboardData(text: result.value!));
+                
+                if(context.mounted){
+                  showSnackBar(context, "Hash copied into clipboard.");
+                }
               },
             )
           ],

@@ -15,11 +15,11 @@ class HomeScreen extends HookWidget {
   @override 
   Widget build(BuildContext context) { 
 
-  const Map<int, Widget> routesMap = {
-    0: DictionaryScreen(),
-    1: HashCrackerScreen(),
-    2: HasherScreen()
-  };
+    const List<Widget> screens = [  
+      DictionaryScreen(),
+      HashCrackerScreen(),
+      HasherScreen()
+    ];
 
     final pageIndex = useState(1);
 
@@ -34,7 +34,7 @@ class HomeScreen extends HookWidget {
           )
         ],
       ),
-      body: routesMap[pageIndex.value],
+      body: screens[pageIndex.value],
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(

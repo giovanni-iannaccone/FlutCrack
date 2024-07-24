@@ -1,15 +1,17 @@
 import 'dart:io';
 
-import 'package:flut_crack/components/card.dart';
+import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flut_crack/data/algorithm_type.dart';
 import 'package:flut_crack/screens/providers/home_screen_state_notifier.dart';
 import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
 import 'package:flut_crack/utils/build_dropdown_utils.dart';
 import 'package:flut_crack/utils/hash_utils.dart';
-import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar;
+import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
+import 'package:flut_crack/widgets/result_card.dart';
 import 'package:flutter/material.dart';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/services.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -54,22 +56,48 @@ class HashCrackerScreen extends HookConsumerWidget {
     final result = state.result;
 
     if(result != null){
-      return buildCard(result.matchedWord!, result.triedWordsCount);
-    } else {
-      return const Text(
-        "Enter a hash to start", 
-        style: TextStyle(
-          color: Colors.grey
-        )
+      return ResultCard(
+        error: !result.success,
+        title: result.success
+          ? result.matchedWord!
+          : "No match found, try another word list.",
+        subtitle: "Tried ${result.triedWordsCount} words.",
+        onCopyPressed: () async {
+          Clipboard.setData(
+            ClipboardData(text: result.matchedWord!)
+          );
+
+          if(context.mounted){
+            showSnackBar(context, "Hash copied into clipboard.");
+          }
+        },
       );
     }
+
+    return const Text(
+      "Enter a hash to start", 
+      style: TextStyle(
+        color: Colors.grey
+      )
+    );
   }
 
-  Future<void> _requestPermissions({
+  Future<void> _requestPermission({
     required Permission permission,
     required void Function() onGranted,
     required void Function() onDenied,
   }) async{
+
+    if(!Platform.isAndroid) {
+      onGranted();
+      return;
+    }
+
+    final androidInfo = await DeviceInfoPlugin().androidInfo;
+    if(androidInfo.version.sdkInt >= 33){
+      onGranted();
+      return;
+    }
 
     if(await permission.isPermanentlyDenied){
       await openAppSettings();
@@ -126,9 +154,20 @@ class HashCrackerScreen extends HookConsumerWidget {
             _renderCrackingResult(context, state),
             const Spacer(),
             ElevatedButton.icon(
-              onPressed: () => _pickWordlistFile(
-                onSuccess: (platformFile) => pickedFilePath.value = platformFile.path,
-                onError: (error) => showErrorSnackBar(context, error)
+              onPressed: () async => await _requestPermission(
+                permission: Permission.storage, 
+                onGranted: () => _pickWordlistFile(
+                  onSuccess: (platformFile) => pickedFilePath.value = platformFile.path,
+                  onError: (error) => showErrorSnackBar(context, error)
+                ), 
+                onDenied: (){
+                  if(context.mounted){
+                    showErrorSnackBar(
+                      context, 
+                      "Without storage permission can't load an external wordlist."
+                    );
+                  }
+                }
               ),
               icon: const Icon(Icons.folder_open),
               label: Text(pickedFilePath.value ?? "Pick a wordlist"),
@@ -140,25 +179,30 @@ class HashCrackerScreen extends HookConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _requestPermissions(
-          permission: Permission.storage,
-          onGranted: () async {
-            if(selectedAlgorithm.value == AlgorithmType.unknown) {
-              selectedAlgorithm.value = hashIdentifying(hashTextController.text);
+        onPressed: () async { 
+          
+          final hash = hashTextController.text.trim();
+          AlgorithmType algorithmType = selectedAlgorithm.value;
+
+          if(algorithmType == AlgorithmType.unknown) {
+            algorithmType = hashIdentifying(hash);
+
+            if(algorithmType == AlgorithmType.unknown){
+
+              if(!context.mounted) return;
+
+              showErrorSnackBar(context, "Unable to detect the hashing alogrithm.");
+              return;
             }
+          }
+          
+          File? path = pickedFilePath.value != null
+            ? File(pickedFilePath.value!)
+            : null;
 
-            File? path = pickedFilePath.value != null
-              ? File(pickedFilePath.value!)
-              : null;
-
-            final wordList = await ref.read(wordListManagerProvider).loadWordList(path);
-            await notifier.crack(hashTextController.text, wordList, selectedAlgorithm.value);
-          },
-          onDenied: () => showErrorSnackBar(
-            context,
-            "Without storage permission can't load an external wordlist."
-          )
-        ),
+          final wordList = await ref.read(wordListManagerProvider).loadWordList(path);
+          await notifier.crack(hash, wordList, algorithmType);        
+        },
         child: const Icon(Icons.vpn_key),
       ),
     );

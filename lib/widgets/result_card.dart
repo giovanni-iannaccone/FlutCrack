@@ -34,11 +34,11 @@ class ResultCard extends StatelessWidget {
                   : Icons.check_circle
               )
             ),
-            Row(
+            if(!error) Row(
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                  onPressed: !error ? onCopyPressed : null,
+                  onPressed: onCopyPressed,
                   child: const Text("Copy")
                 )
               ],
