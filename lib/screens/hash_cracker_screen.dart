@@ -75,15 +75,16 @@ class HashCrackerScreen extends HookConsumerWidget {
       await openAppSettings();
     }
 
-    if(await permission.isGranted){
+    if(await permission.isGranted) {
       onGranted();
       return;
     } else {
-      final status = await permission.status;
-      
-      status.isGranted
-        ? onGranted()
-        : onDenied();
+
+      if (await permission.request().isGranted) {
+        onGranted();
+      } else {
+        onDenied();
+      }
     }
   }
 
@@ -142,7 +143,7 @@ class HashCrackerScreen extends HookConsumerWidget {
         onPressed: () => _requestPermissions(
           permission: Permission.storage,
           onGranted: () async {
-            if(selectedAlgorithm.value == AlgorithmType.unknown){
+            if(selectedAlgorithm.value == AlgorithmType.unknown) {
               selectedAlgorithm.value = hashIdentifying(hashTextController.text);
             }
 
