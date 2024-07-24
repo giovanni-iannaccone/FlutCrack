@@ -20,3 +20,15 @@ String calculateHash(String word, AlgorithmType alg) {
   return algorithmTypeAlgorithmTypeToFunctionMap[alg]!.convert(bytes).toString();
 }
 
+AlgorithmType hashIdentifying(String hash) {
+  const algorithmLengthToTypeMap = {
+    32: AlgorithmType.md5,
+    40: AlgorithmType.sha1,
+    56: AlgorithmType.sha224,
+    64: AlgorithmType.sha256,
+    96: AlgorithmType.sha384,
+    128: AlgorithmType.sha512,
+  };
+
+  return algorithmLengthToTypeMap[hash.length]!;
+}

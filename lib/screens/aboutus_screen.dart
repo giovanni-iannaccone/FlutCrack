@@ -1,6 +1,5 @@
 import 'package:flut_crack/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flut_crack/widgets/nav_drawer.dart';
 
 class AboutUsScreen extends StatelessWidget {
   const AboutUsScreen({super.key});
@@ -11,11 +10,6 @@ class AboutUsScreen extends StatelessWidget {
     final colorScheme = colorSchemeOf(context);
 
     return Scaffold(
-      drawer: const NavDrawer(),
-      appBar: AppBar(
-        title: const Text("About FlutCrack"),
-        backgroundColor: colorScheme.primaryContainer,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -27,10 +21,6 @@ class AboutUsScreen extends StatelessWidget {
                 color: colorScheme.primary
               ),
               title: const Text("FlutCrack 1.1"),
-            ),
-            ListTile(
-              leading: Icon(Icons.person, color: colorScheme.primary),
-              title: const Text("Creator: Giovanni Iannaccone"),
             ),
             ListTile(
               leading: Icon(Icons.balance, color: colorScheme.primary),
@@ -51,7 +41,7 @@ class AboutUsScreen extends StatelessWidget {
               ),
             ),
             const Spacer(),
-            const Text("Thanks to all the Flutter development team. Happy hacking"),
+            const Text("A big thank you to the Flutter development team and everyone who contributed to the app. Happy Hacking !"),
           ],
         ),
       ),

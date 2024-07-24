@@ -1,3 +1,4 @@
 const String home = '/';
+const String hashCracker = '/hashCracker';
 const String dictionary = '/dictionary';
-const String credits = '/aboutus';
+const String aboutUs = '/aboutus';

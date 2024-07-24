@@ -1,199 +1,73 @@
-import 'dart:io';
+import 'package:flut_crack/screens/aboutus_screen.dart';
+import 'package:flut_crack/screens/dictionary_screen.dart';
+import 'package:flut_crack/screens/hash_cracker_screen.dart';
+import 'package:flut_crack/screens/hasher_screen.dart';
 
-import 'package:flut_crack/data/algorithm_type.dart';
-import 'package:flut_crack/screens/providers/home_screen_state_notifier.dart';
-import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
-import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar;
-import 'package:flut_crack/utils/theme_utils.dart' show colorSchemeOf;
 import 'package:flutter/material.dart';
-import 'package:file_picker/file_picker.dart';
 
-import 'package:flut_crack/widgets/nav_drawer.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:permission_handler/permission_handler.dart';
-
-
-class HomeScreen extends HookConsumerWidget {
+class HomeScreen extends StatefulWidget { 
   const HomeScreen({super.key});
+  
+  @override 
+  State<HomeScreen> createState() => _HomeScreenState(); 
+} 
+  
+class _HomeScreenState extends State<HomeScreen> { 
+  int _selectedIndex = 1;
 
-  Future<void> _pickWordlistFile({
-    required void Function(PlatformFile) onSuccess,
-    required void Function(String error) onError,
-  }) async {
+  Map<int, Widget> routesMap = {
+    0: const DictionaryScreen(),
+    1: const HashCrackerScreen(),
+    2: const HasherScreen(),
+    3: const AboutUsScreen()
+  };
 
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['txt'],
-      );
-
-      if(result == null){
-        return;
+  _onItemTapped(int index) {
+    setState(() {
+      if (index != 3) {
+        _selectedIndex = index;
       }
-
-      if (result.files.isNotEmpty) {
-        onSuccess(result.files.first);
-      } else {
-        onError("An error occured during file picking!");
-      }
-    } on Exception catch(ex) {
-      onError(ex.toString());
-    }
+    });
   }
 
-  List<DropdownMenuItem<AlgorithmType>> _buildDropdownMenuItesm(){
-    return AlgorithmType.values.map((AlgorithmType item) {
-      return DropdownMenuItem<AlgorithmType>(
-        value: item,
-        child: Text(item.formattedName),
-      );
-    }).toList();
-  }
-
-  Widget _renderCrackingResult(BuildContext context, HomeState state){
-
-    if(state.isLoading){
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
-    }
-
-    final colorScheme = colorSchemeOf(context);
-    final result = state.result;
-
-    if(result != null){
-      return Column(
-        children: [
-          Text(
-            result.success
-              ? result.matchedWord!
-              : "Word not present in the selected wordlist", 
-            style: TextStyle(
-              color: colorScheme.secondary
-            )
-          ),
-          Text(
-            "Tried ${result.triedWordsCount} words.",
-            style: TextStyle(
-              color: colorScheme.secondary
-            )
-          )
-        ]
-      );
-    } else {
-      return const Text(
-        "Enter a hash to start", 
-        style: TextStyle(
-          color: Colors.grey
-        )
-      );
-    }
-  }
-
-  Future<void> _requestPermissions({
-    required Permission permission,
-    required void Function() onGranted,
-    required void Function() onDenied,
-  }) async{
-
-    if(await permission.isPermanentlyDenied){
-      await openAppSettings();
-    }
-
-    if(await permission.isGranted){
-      onGranted();
-      return;
-    } else {
-      final status = await permission.status;
-      
-      status.isGranted
-        ? onGranted()
-        : onDenied();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-
-    final colorScheme = colorSchemeOf(context);
-
-    final hashTextController = useTextEditingController();
-    final selectedAlgorithm = useState(AlgorithmType.unknown);
-    final pickedFilePath = useState<String?>(null);
-
-    final notifier = ref.read(homeStateStateNotifier.notifier);
-    final state = ref.watch(homeStateStateNotifier);
-
+  @override 
+  Widget build(BuildContext context) { 
     return Scaffold(
-      drawer: const NavDrawer(),
       appBar: AppBar(
         title: const Text("FlutCrack"),
-        backgroundColor: colorScheme.primaryContainer,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextField(
-              controller: hashTextController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Enter your hash',
-                prefixIcon: Icon(Icons.lock),
-              ),
-            ),
-            const SizedBox(height: 16),
-            DropdownButtonFormField<AlgorithmType>(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Select Hash Algorithm',
-              ),
-              items: _buildDropdownMenuItesm(),
-              onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
-              value: selectedAlgorithm.value,
-            ),
-            const SizedBox(height: 16),
-            _renderCrackingResult(context, state),
-            const Spacer(),
-            ElevatedButton.icon(
-              onPressed: () => _pickWordlistFile(
-                onSuccess: (platformFile) => pickedFilePath.value = platformFile.path,
-                onError: (error) => showErrorSnackBar(context, error)
-              ),
-              icon: const Icon(Icons.folder_open),
-              label: Text(pickedFilePath.value ?? "Pick a wordlist"),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(20),
-              ),
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _requestPermissions(
-          permission: Permission.storage,
-          onGranted: () async {
-            if(selectedAlgorithm.value == AlgorithmType.unknown){
-              showErrorSnackBar(context, "Please select a valid hashing algorithm.");
-              return;
-            }
-
-            File? path = pickedFilePath.value != null
-              ? File(pickedFilePath.value!)
-              : null;
-
-            final wordList = await ref.read(wordListManagerProvider).loadWordList(path);
-            await notifier.crack(hashTextController.text, wordList, selectedAlgorithm.value);
-          },
-          onDenied: () => showErrorSnackBar(
-            context,
-            "Without storage permission can't load an external wordlist."
+        backgroundColor: Colors.blueAccent,
+        actions: [
+          IconButton(
+            onPressed: () {
+              _onItemTapped(3);
+            },
+            icon: const Icon(Icons.question_mark)
           )
-        ),
-        child: const Icon(Icons.vpn_key),
+        ],
       ),
-    );
-  }
+
+      body: routesMap[_selectedIndex],
+
+      bottomNavigationBar: BottomNavigationBar(
+        items: const <BottomNavigationBarItem>[
+          
+          BottomNavigationBarItem(
+            icon: Icon(Icons.file_copy),
+            label: 'Wordlists',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.lock),
+            label: 'Hasher',
+          ),
+        ],
+        currentIndex: _selectedIndex,
+        selectedItemColor: Colors.blue,
+        onTap: _onItemTapped,
+      ),
+    ); 
+  } 
 }

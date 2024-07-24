@@ -1,7 +1,6 @@
 import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
 import 'package:flut_crack/utils/theme_utils.dart' show colorSchemeOf;
 import 'package:flutter/material.dart';
-import 'package:flut_crack/widgets/nav_drawer.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 
@@ -16,11 +15,6 @@ class DictionaryScreen extends HookConsumerWidget {
     final wordListManger = ref.watch(wordListManagerProvider);
 
     return Scaffold(
-      drawer: const NavDrawer(),
-      appBar: AppBar(
-        title: const Text("Dictionary Management"),
-        backgroundColor: colorScheme.primaryContainer,
-      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
