@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'theme_utils.dart' show colorSchemeOf;
 
-void showErrorSnackBar(BuildContext context, String error){
+void _showSnackBar(BuildContext context, String message, {bool error = false}){
   final colorScheme = colorSchemeOf(context);
 
   ScaffoldMessenger.of(context).showSnackBar(
@@ -9,14 +9,22 @@ void showErrorSnackBar(BuildContext context, String error){
       padding: const EdgeInsets.all(10),
       elevation: 2,
       showCloseIcon: true,
-      closeIconColor: colorScheme.onError,
-      backgroundColor: colorScheme.error,
+      closeIconColor: error ? colorScheme.onError : null,
+      backgroundColor: error ? colorScheme.error : null,
       content: Text(
-        error, 
+        message, 
         style: TextStyle(
-          color: colorScheme.onError
+          color: error ? colorScheme.onError : null
         )
       )
     )
   );
+}
+
+void showErrorSnackBar(BuildContext context, String message){
+  _showSnackBar(context, message, error: true);
+}
+
+void showSnackBar(BuildContext context, String message){
+  _showSnackBar(context, message);
 }
