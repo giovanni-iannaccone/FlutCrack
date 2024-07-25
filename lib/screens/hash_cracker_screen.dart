@@ -2,10 +2,10 @@ import 'dart:io';
 
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flut_crack/data/algorithm_type.dart';
+import 'package:flut_crack/screens/providers/hasher_provider.dart';
 import 'package:flut_crack/screens/providers/home_screen_state_notifier.dart';
 import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
 import 'package:flut_crack/utils/build_dropdown_utils.dart';
-import 'package:flut_crack/utils/hash_utils.dart';
 import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
 import 'package:flut_crack/widgets/result_card.dart';
 import 'package:flutter/material.dart';
@@ -184,7 +184,7 @@ class HashCrackerScreen extends HookConsumerWidget {
           AlgorithmType algorithmType = selectedAlgorithm.value;
 
           if(algorithmType == AlgorithmType.unknown) {
-            algorithmType = hashIdentifying(hash);
+            algorithmType = ref.read(hasherProvider).indentifyAlgorithm(hash);
 
             if(algorithmType == AlgorithmType.unknown){
 

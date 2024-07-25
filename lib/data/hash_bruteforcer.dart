@@ -1,5 +1,5 @@
 
-import 'package:flut_crack/utils/hash_utils.dart';
+import 'package:flut_crack/data/hasher.dart';
 import 'package:flutter/material.dart';
 
 import 'algorithm_type.dart';
@@ -22,6 +22,11 @@ class HashBruteforcingResult {
 }
 
 class HashBruteforcer {
+
+  final Hasher _hasher;
+
+  const HashBruteforcer(this._hasher);
+
   Future<HashBruteforcingResult> crackHash(
     String hash, 
     List<String> wordList,
@@ -32,7 +37,10 @@ class HashBruteforcer {
     
     for(final word in wordList){
       attempts++;
-      if(calculateHash(word, algorithm) != hash) continue;
+
+      if(_hasher.calculateHash(word, algorithm) != hash) {
+        continue;
+      }
 
       return HashBruteforcingResult.success(
         attempts: attempts, 

@@ -1,6 +1,6 @@
+import 'package:flut_crack/screens/providers/hasher_provider.dart';
 import 'package:flut_crack/utils/snackbar_utils.dart';
 import 'package:flut_crack/widgets/result_card.dart';
-import 'package:flut_crack/utils/hash_utils.dart';
 import 'package:flut_crack/data/algorithm_type.dart';
 import 'package:flut_crack/utils/build_dropdown_utils.dart';
 
@@ -63,7 +63,7 @@ class HasherScreen extends HookConsumerWidget {
             return;
           }
           
-          result.value = calculateHash(
+          result.value = ref.read(hasherProvider).calculateHash(
             hashTextController.text.trim(), 
             selectedAlgorithm.value
           );
