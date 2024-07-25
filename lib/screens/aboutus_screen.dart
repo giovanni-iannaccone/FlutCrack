@@ -10,6 +10,9 @@ class AboutUsScreen extends StatelessWidget {
     final colorScheme = colorSchemeOf(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("About Us"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

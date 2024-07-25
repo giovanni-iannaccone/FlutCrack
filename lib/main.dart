@@ -8,7 +8,7 @@ import 'package:flut_crack/screens/hash_cracker_screen.dart';
 
 import 'app_routes.dart' as routes;
 
-void main() async {
+void main() {
   runApp(
     const ProviderScope(
       child: FlutCrack()
@@ -23,6 +23,7 @@ class FlutCrack extends StatelessWidget {
   Widget build(BuildContext context) {
    return MaterialApp(
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.dark,
