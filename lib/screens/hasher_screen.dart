@@ -1,8 +1,8 @@
 import 'package:flut_crack/screens/providers/hasher_provider.dart';
 import 'package:flut_crack/utils/snackbar_utils.dart';
+import 'package:flut_crack/widgets/hash_algorithm_selector.dart';
 import 'package:flut_crack/widgets/result_card.dart';
 import 'package:flut_crack/data/algorithm_type.dart';
-import 'package:flut_crack/utils/build_dropdown_utils.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -33,12 +33,8 @@ class HasherScreen extends HookConsumerWidget {
               ),
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<AlgorithmType>(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Select Hash Algorithm',
-              ),
-              items: buildDropdownMenuItems(),
+            HashAlgorithmSelector(
+              label: "Select hash algorithm",
               onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
               value: selectedAlgorithm.value,
             ),

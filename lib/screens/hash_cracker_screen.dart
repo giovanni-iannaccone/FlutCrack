@@ -5,8 +5,8 @@ import 'package:flut_crack/data/algorithm_type.dart';
 import 'package:flut_crack/screens/providers/hasher_provider.dart';
 import 'package:flut_crack/screens/providers/home_screen_state_notifier.dart';
 import 'package:flut_crack/screens/providers/word_list_manager_provider.dart';
-import 'package:flut_crack/utils/build_dropdown_utils.dart';
 import 'package:flut_crack/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
+import 'package:flut_crack/widgets/hash_algorithm_selector.dart';
 import 'package:flut_crack/widgets/result_card.dart';
 import 'package:flutter/material.dart';
 
@@ -68,7 +68,7 @@ class HashCrackerScreen extends HookConsumerWidget {
             );
 
             if(context.mounted){
-              showSnackBar(context, "Hash copied into clipboard.");
+              showSnackBar(context, "Result copied into clipboard.");
             }
           },
         );
@@ -135,17 +135,13 @@ class HashCrackerScreen extends HookConsumerWidget {
               controller: hashTextController,
               decoration: const InputDecoration(
                 border: OutlineInputBorder(),
-                labelText: 'Enter your hash',
+                labelText: "Enter your hash",
                 prefixIcon: Icon(Icons.lock),
               ),
             ),
             const SizedBox(height: 16),
-            DropdownButtonFormField<AlgorithmType>(
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                labelText: 'Select Hash Algorithm',
-              ),
-              items: buildDropdownMenuItems(),
+            HashAlgorithmSelector(
+              label: "Select hash algorithm",
               onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
               value: selectedAlgorithm.value,
             ),
