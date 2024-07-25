@@ -45,41 +45,39 @@ class HashCrackerScreen extends HookConsumerWidget {
     }
   }
 
-  Widget _renderCrackingResult(BuildContext context, HomeState state){
+  Widget _renderBasedOnState(BuildContext context, HomeState state){
+    switch(state){
+      case HomeStateIdle():
+        return const Text(
+          "Enter a hash to start", 
+          style: TextStyle(
+            color: Colors.grey
+          )
+        );
+      case HomeStateLoading():
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      case HomeStateSuccess(:final matchedWord, :final attempts):
+        return ResultCard(
+          title: matchedWord,
+          subtitle: "Match found after $attempts attempts.",
+          onCopyPressed: () async {
+            await Clipboard.setData(
+              ClipboardData(text: matchedWord)
+            );
 
-    if(state.isLoading){
-      return const Center(
-        child: CircularProgressIndicator(),
-      );
+            if(context.mounted){
+              showSnackBar(context, "Hash copied into clipboard.");
+            }
+          },
+        );
+      case HomeStateError(:final message):
+        return ResultCard(
+          error: true,
+          title: message
+        );
     }
-
-    final result = state.result;
-
-    if(result != null){
-      return ResultCard(
-        error: !result.success,
-        title: result.success
-          ? result.matchedWord!
-          : "No match found, try another word list.",
-        subtitle: "Tried ${result.triedWordsCount} words.",
-        onCopyPressed: () async {
-          Clipboard.setData(
-            ClipboardData(text: result.matchedWord!)
-          );
-
-          if(context.mounted){
-            showSnackBar(context, "Hash copied into clipboard.");
-          }
-        },
-      );
-    }
-
-    return const Text(
-      "Enter a hash to start", 
-      style: TextStyle(
-        color: Colors.grey
-      )
-    );
   }
 
   Future<void> _requestPermission({
@@ -123,6 +121,7 @@ class HashCrackerScreen extends HookConsumerWidget {
     final pickedFilePath = useState<String?>(null);
     final selectedAlgorithm = useState(AlgorithmType.unknown);
 
+    final wordListManager = ref.read(wordListManagerProvider);
     final notifier = ref.read(homeStateStateNotifier.notifier);
     final state = ref.watch(homeStateStateNotifier);
 
@@ -151,7 +150,7 @@ class HashCrackerScreen extends HookConsumerWidget {
               value: selectedAlgorithm.value,
             ),
             const SizedBox(height: 16),
-            _renderCrackingResult(context, state),
+            _renderBasedOnState(context, state),
             const Spacer(),
             ElevatedButton.icon(
               onPressed: () async => await _requestPermission(
@@ -200,8 +199,8 @@ class HashCrackerScreen extends HookConsumerWidget {
             ? File(pickedFilePath.value!)
             : null;
 
-          final wordList = await ref.read(wordListManagerProvider).loadWordList(path);
-          await notifier.crack(hash, wordList, algorithmType);        
+          final wordList = await wordListManager.loadWordList(path);
+          await notifier.crackHash(hash, wordList, algorithmType);        
         },
         child: const Icon(Icons.vpn_key),
       ),

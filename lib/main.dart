@@ -8,7 +8,7 @@ import 'package:flut_crack/screens/hash_cracker_screen.dart';
 
 import 'app_routes.dart' as routes;
 
-void main() async {
+void main() {
   runApp(
     const ProviderScope(
       child: FlutCrack()
