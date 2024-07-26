@@ -1,6 +1,6 @@
-import 'package:flut_crack/screens/dictionary_screen.dart';
 import 'package:flut_crack/screens/hash_cracker_screen.dart';
 import 'package:flut_crack/screens/hasher_screen.dart';
+import 'package:flut_crack/screens/manage_wordlists.dart';
 import 'package:flut_crack/utils/navigation_utils.dart';
 import 'package:flut_crack/app_routes.dart' as routes;
 
@@ -16,7 +16,7 @@ class HomeScreen extends HookWidget {
   Widget build(BuildContext context) { 
 
     const List<Widget> screens = [  
-      DictionaryScreen(),
+      WordListsScreen(),
       HashCrackerScreen(),
       HasherScreen()
     ];

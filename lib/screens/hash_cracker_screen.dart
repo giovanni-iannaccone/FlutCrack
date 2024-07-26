@@ -10,7 +10,7 @@ import 'package:flut_crack/widgets/hash_algorithm_selector.dart';
 import 'package:flut_crack/widgets/result_card.dart';
 import 'package:flutter/material.dart';
 
-import 'package:file_picker/file_picker.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter/services.dart';
 
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -21,24 +21,30 @@ class HashCrackerScreen extends HookConsumerWidget {
   const HashCrackerScreen({super.key});
 
   Future<void> _pickWordlistFile({
-    required void Function(PlatformFile) onSuccess,
+    required void Function(XFile) onSuccess,
     required void Function(String error) onError,
+    required wordListManager
   }) async {
 
-    try {
-      FilePickerResult? result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['txt'],
-      );
+    const XTypeGroup typeGroup = XTypeGroup(
+      label: 'text',
+      extensions: <String>['txt'],
+    );
 
+    try {
+      final XFile? result = await openFile(
+        acceptedTypeGroups: <XTypeGroup>[typeGroup],
+        initialDirectory: await wordListManager.localPath
+      );
+  
       if(result == null){
         return;
       }
 
-      if (result.files.isNotEmpty) {
-        onSuccess(result.files.first);
-      } else {
+      if (result.toString().isEmpty) {
         onError("An error occured during file picking!");
+      } else {
+        onSuccess(result);
       }
     } on Exception catch(ex) {
       onError(ex.toString());
@@ -152,8 +158,9 @@ class HashCrackerScreen extends HookConsumerWidget {
               onPressed: () async => await _requestPermission(
                 permission: Permission.storage, 
                 onGranted: () => _pickWordlistFile(
-                  onSuccess: (platformFile) => pickedFilePath.value = platformFile.path,
-                  onError: (error) => showErrorSnackBar(context, error)
+                  onSuccess: (file) => pickedFilePath.value = file.path,
+                  onError: (error) => showErrorSnackBar(context, error),
+                  wordListManager: wordListManager
                 ), 
                 onDenied: (){
                   if(context.mounted){
@@ -195,7 +202,7 @@ class HashCrackerScreen extends HookConsumerWidget {
             ? File(pickedFilePath.value!)
             : null;
 
-          final wordList = await wordListManager.loadWordList(path);
+          final wordList = await wordListManager.loadWordList(path!);
           await notifier.crackHash(hash, wordList, algorithmType);        
         },
         child: const Icon(Icons.vpn_key),

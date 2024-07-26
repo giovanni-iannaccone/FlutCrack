@@ -1,3 +1,5 @@
+import 'package:flut_crack/screens/hasher_screen.dart';
+import 'package:flut_crack/screens/manage_wordlists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,7 +36,9 @@ class FlutCrack extends StatelessWidget {
         routes.home: (context) => const HomeScreen(),
         routes.hashCracker: (context) => const HashCrackerScreen(),
         routes.dictionary: (context) => const DictionaryScreen(),
-        routes.aboutUs: (context) => const AboutUsScreen()
+        routes.aboutUs: (context) => const AboutUsScreen(),
+        routes.manageWordlists: (context) => const WordListsScreen(),
+        routes.hasher: (context) => const HasherScreen()
       },
     );
   }

@@ -29,7 +29,7 @@ class ResultCard extends StatelessWidget {
               subtitle: Text(subtitle ?? ""),
               leading: Icon(
                 color: error ? Colors.red : Colors.greenAccent,
-                error 
+                error
                   ? Icons.highlight_off 
                   : Icons.check_circle
               )

@@ -23,7 +23,7 @@ class AboutUsScreen extends StatelessWidget {
                 Icons.thumb_up, 
                 color: colorScheme.primary
               ),
-              title: const Text("FlutCrack 1.1"),
+              title: const Text("FlutCrack 2.0"),
             ),
             ListTile(
               leading: Icon(Icons.balance, color: colorScheme.primary),
