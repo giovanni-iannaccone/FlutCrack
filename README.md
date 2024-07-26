@@ -7,8 +7,7 @@ FlutCrack is a Flutter application designed to crack hashes by comparing them ag
 
 ## 📚 Features
 
-- Hash cracking using a predefined wordlist
-- Hash identifying  
+- Hash cracking and algorithms identifying
 - Support for multiple hash algorithms:
   - MD5
   - SHA-1
@@ -19,6 +18,7 @@ FlutCrack is a Flutter application designed to crack hashes by comparing them ag
   - SHA-512/224
   - SHA-512/256
 - User-friendly interface with text input and dropdown selection for hash algorithms
+- Words hasher
 
 ## 👩‍💻 Installation
 
@@ -69,17 +69,19 @@ You may need to allow installations from unknown sources. This can be done by go
 ## 🎮 Usage
 
 1. Open the FlutCrack application on your device or emulator.
-2. Before cracking your hash, go to the Dictionary section and insert your wordlist. This step is required only on the first run, as the previous wordlist will be saved for future use.
-3. Enter the hash you want to crack in the text field.
-4. Select the hash algorithm from the dropdown menu.
-5. Press the action button to start the cracking process.
-6. The result will be displayed below the input fields.
+2. Before cracking your hash, go to the wordlists section, create and add words to your wordlist. This step is required only on the first run, as the previous wordlist will be saved for future use.
+3. Go back to the home screen, pick the wordlist you want to use from those you created of from your device memory.
+4. Enter the hash you want to crack in the text field.
+5. Select the hash algorithm from the dropdown menu (if you know it).
+6. Press the action button to start the cracking process.
+7. The result will be displayed below the input fields.
 
 ## 🎬 Coming Soon
 - [x] Hash identifying  
 - [x] Cleaner code
-- [ ] Salted hash ( maybe )
 - [x] New UI
+- [x] Multiple wordlists support
+- [ ] Salted hash ( maybe )
 
 ## 🧩 Contributing
 We welcome contributions! Please follow these steps:
