@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:crypto/crypto.dart' as crypto;
-import 'package:flut_crack/data/algorithm_type.dart';
+import 'package:flut_crack/core/algorithm_type.dart';
 
 class Hasher {
 

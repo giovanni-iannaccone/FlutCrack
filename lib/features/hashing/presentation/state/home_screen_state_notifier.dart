@@ -1,6 +1,6 @@
-import 'package:flut_crack/data/algorithm_type.dart';
-import 'package:flut_crack/data/hash_bruteforcer.dart';
-import 'package:flut_crack/screens/providers/hash_bruteforcer_provider.dart';
+import 'package:flut_crack/core/algorithm_type.dart';
+import 'package:flut_crack/core/hash_bruteforcer.dart';
+import 'package:flut_crack/features/hashing/presentation/state/hash_bruteforcer_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

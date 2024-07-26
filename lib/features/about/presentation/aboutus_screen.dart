@@ -1,4 +1,4 @@
-import 'package:flut_crack/utils/theme_utils.dart';
+import 'package:flut_crack/core/utils/theme_utils.dart';
 import 'package:flutter/material.dart';
 
 class AboutUsScreen extends StatelessWidget {

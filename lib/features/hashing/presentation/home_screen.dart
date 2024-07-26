@@ -1,7 +1,7 @@
-import 'package:flut_crack/screens/hash_cracker_screen.dart';
-import 'package:flut_crack/screens/hasher_screen.dart';
-import 'package:flut_crack/screens/manage_wordlists.dart';
-import 'package:flut_crack/utils/navigation_utils.dart';
+import 'package:flut_crack/features/hashing/presentation/hash_cracker_screen.dart';
+import 'package:flut_crack/features/hashing/presentation/hasher_screen.dart';
+import 'package:flut_crack/features/wordlists/presentation/manage_wordlists.dart';
+import 'package:flut_crack/core/utils/navigation_utils.dart';
 import 'package:flut_crack/app_routes.dart' as routes;
 
 import 'package:flutter/material.dart';
@@ -29,7 +29,7 @@ class HomeScreen extends HookWidget {
         backgroundColor: Colors.blueAccent,
         actions: [
           IconButton(
-            onPressed: () => navigateTo(context, routes.aboutUs),
+            onPressed: () => navigateTo(context, routes.about),
             icon: const Icon(Icons.question_mark)
           )
         ],

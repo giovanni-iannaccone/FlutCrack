@@ -1,5 +1,5 @@
 
-import 'package:flut_crack/data/hasher.dart';
+import 'package:flut_crack/core/hasher.dart';
 import 'package:flutter/material.dart';
 
 import 'algorithm_type.dart';
