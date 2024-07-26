@@ -1,3 +1,5 @@
+import 'package:flut_crack/screens/hasher_screen.dart';
+import 'package:flut_crack/screens/manage_wordlists.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,7 +10,7 @@ import 'package:flut_crack/screens/hash_cracker_screen.dart';
 
 import 'app_routes.dart' as routes;
 
-void main() async {
+void main() {
   runApp(
     const ProviderScope(
       child: FlutCrack()
@@ -23,6 +25,7 @@ class FlutCrack extends StatelessWidget {
   Widget build(BuildContext context) {
    return MaterialApp(
       theme: ThemeData(
+        useMaterial3: true,
         colorScheme: ColorScheme.fromSeed(
           seedColor: Colors.blue,
           brightness: Brightness.dark,
@@ -33,7 +36,9 @@ class FlutCrack extends StatelessWidget {
         routes.home: (context) => const HomeScreen(),
         routes.hashCracker: (context) => const HashCrackerScreen(),
         routes.dictionary: (context) => const DictionaryScreen(),
-        routes.aboutUs: (context) => const AboutUsScreen()
+        routes.aboutUs: (context) => const AboutUsScreen(),
+        routes.manageWordlists: (context) => const WordListsScreen(),
+        routes.hasher: (context) => const HasherScreen()
       },
     );
   }

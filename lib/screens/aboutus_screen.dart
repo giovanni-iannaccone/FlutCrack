@@ -10,6 +10,9 @@ class AboutUsScreen extends StatelessWidget {
     final colorScheme = colorSchemeOf(context);
 
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("About Us"),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -20,7 +23,7 @@ class AboutUsScreen extends StatelessWidget {
                 Icons.thumb_up, 
                 color: colorScheme.primary
               ),
-              title: const Text("FlutCrack 1.1"),
+              title: const Text("FlutCrack 2.0"),
             ),
             ListTile(
               leading: Icon(Icons.balance, color: colorScheme.primary),
