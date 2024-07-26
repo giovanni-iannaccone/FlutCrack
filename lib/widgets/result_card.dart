@@ -29,8 +29,8 @@ class ResultCard extends StatelessWidget {
               subtitle: Text(subtitle ?? ""),
               leading: Icon(
                 color: error ? Colors.red : Colors.greenAccent,
-                error 
-                  ? Icons.highlight_off
+                error
+                  ? Icons.highlight_off 
                   : Icons.check_circle
               )
             ),
