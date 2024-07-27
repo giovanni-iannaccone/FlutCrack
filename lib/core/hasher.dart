@@ -23,7 +23,7 @@ class Hasher {
     return hashFunction!.convert(bytes).toString();
   }
 
-  AlgorithmType indentifyAlgorithm(String hash) {
+  AlgorithmType identifyAlgorithm(String hash) {
 
     const algorithmLengthToTypeMap = {
       32: AlgorithmType.md5,
