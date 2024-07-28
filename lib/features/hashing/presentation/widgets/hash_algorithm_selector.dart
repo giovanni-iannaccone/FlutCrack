@@ -1,13 +1,12 @@
-import 'package:flut_crack/core/algorithm_type.dart';
+import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-
 
 class HashAlgorithmSelector extends HookWidget {
 
   final String label;
-  final void Function(AlgorithmType?)? onChanged;
-  final AlgorithmType? value;
+  final void Function(HashAlgorithmType?)? onChanged;
+  final HashAlgorithmType? value;
 
   const HashAlgorithmSelector({
     super.key,
@@ -16,9 +15,9 @@ class HashAlgorithmSelector extends HookWidget {
     this.onChanged
   });
 
-  List<DropdownMenuItem<AlgorithmType>> _buildDropdownMenuItems(){
-    return AlgorithmType.values.map((AlgorithmType item) {
-      return DropdownMenuItem<AlgorithmType>(
+  List<DropdownMenuItem<HashAlgorithmType>> _buildDropdownMenuItems(){
+    return HashAlgorithmType.values.map((HashAlgorithmType item) {
+      return DropdownMenuItem<HashAlgorithmType>(
         value: item,
         child: Text(item.formattedName),
       );
@@ -27,7 +26,7 @@ class HashAlgorithmSelector extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<AlgorithmType>(
+    return DropdownButtonFormField<HashAlgorithmType>(
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         labelText: label,

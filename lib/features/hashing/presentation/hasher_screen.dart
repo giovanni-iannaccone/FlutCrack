@@ -1,8 +1,8 @@
-import 'package:flut_crack/features/hashing/presentation/state/hasher_provider.dart';
+import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flut_crack/core/utils/snackbar_utils.dart';
-import 'package:flut_crack/common_widgets/hash_algorithm_selector.dart';
-import 'package:flut_crack/common_widgets/result_card.dart';
-import 'package:flut_crack/core/algorithm_type.dart';
+import 'package:flut_crack/features/hashing/presentation/state/hasher_screen_state_notifier.dart';
+import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
+import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -15,8 +15,10 @@ class HasherScreen extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final hashTextController = useTextEditingController();
+    final selectedAlgorithm = useState(HashAlgorithmType.unknown);
+
+    final notifier = ref.read(hasherScreenStateNotifier.notifier);
     final result = useState<String?>(null);
-    final selectedAlgorithm = useState(AlgorithmType.unknown);
 
     return Scaffold(
       body: Padding(
@@ -35,32 +37,41 @@ class HasherScreen extends HookConsumerWidget {
             const SizedBox(height: 16),
             HashAlgorithmSelector(
               label: "Select hash algorithm",
-              onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
+              onChanged: (type) => selectedAlgorithm.value = type ?? HashAlgorithmType.unknown,
               value: selectedAlgorithm.value,
             ),
             const SizedBox(height: 32),
-            if (result.value != null) ResultCard(
-              title: result.value!,
-              onCopyPressed: () async {
-                await Clipboard.setData(ClipboardData(text: result.value!));
-                
-                if(context.mounted){
-                  showSnackBar(context, "Hash copied into clipboard.");
-                }
-              },
-            )
+            (result.value == null)
+              ? const Text(
+                "Enter a hash to start",
+                style: TextStyle(
+                  color: Colors.grey
+                )
+              )
+              : ResultCard(
+                title: result.value!,
+                onCopyPressed: () async {
+                  await Clipboard.setData(
+                    ClipboardData(text: result.value!)
+                  );
+
+                  if (context.mounted) {
+                    showSnackBar(context, "Hash copied into clipboard.");
+                  }
+                },
+              )
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          if (selectedAlgorithm.value == AlgorithmType.unknown) {
-            showErrorSnackBar(context, "Choose an hashing alogrithm.");
+        onPressed: () async {
+          if (selectedAlgorithm.value == HashAlgorithmType.unknown) {
+            showErrorSnackBar(context, "Choose an hashing algorithm.");
             return;
           }
-          
-          result.value = ref.read(hasherProvider).calculateHash(
-            hashTextController.text.trim(), 
+
+          result.value = notifier.calculateHash(
+            hashTextController.text.trim(),
             selectedAlgorithm.value
           );
         },

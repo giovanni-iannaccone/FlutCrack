@@ -1,15 +1,14 @@
 import 'dart:io';
 
-import 'package:device_info_plus/device_info_plus.dart';
-import 'package:flut_crack/core/algorithm_type.dart';
-import 'package:flut_crack/features/hashing/presentation/state/hasher_provider.dart';
-import 'package:flut_crack/features/hashing/presentation/state/home_screen_state_notifier.dart';
-import 'package:flut_crack/features/wordlists/presentation/state/word_list_manager_provider.dart';
-import 'package:flut_crack/core/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
-import 'package:flut_crack/common_widgets/dialog_widget.dart';
-import 'package:flut_crack/common_widgets/hash_algorithm_selector.dart';
-import 'package:flut_crack/common_widgets/result_card.dart';
 import 'package:flutter/material.dart';
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
+import 'package:flut_crack/features/hashing/presentation/state/hash_cracker_screen_state_notifier.dart';
+import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
+import 'package:flut_crack/features/wordlists/presentation/state/word_list_manager_provider.dart';
+import 'package:flut_crack/common_widgets/dialog_widget.dart';
+import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
+import 'package:flut_crack/core/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/services.dart';
@@ -52,20 +51,20 @@ class HashCrackerScreen extends HookConsumerWidget {
     }
   }
 
-  Widget _renderBasedOnState(BuildContext context, HomeState state){
+  Widget _renderBasedOnState(BuildContext context, HashCrackerScreenState state){
     switch(state){
-      case HomeStateIdle():
+      case HashCrackerScreenStateIdle():
         return const Text(
           "Enter a hash to start", 
           style: TextStyle(
             color: Colors.grey
           )
         );
-      case HomeStateLoading():
+      case HashCrackerScreenStateLoading():
         return const Center(
           child: CircularProgressIndicator(),
         );
-      case HomeStateSuccess(:final matchedWord, :final attempts):
+      case HashCrackerScreenStateSuccess(:final matchedWord, :final attempts):
         return ResultCard(
           title: matchedWord,
           subtitle: "Match found after $attempts attempts.",
@@ -79,7 +78,7 @@ class HashCrackerScreen extends HookConsumerWidget {
             }
           },
         );
-      case HomeStateError(:final message):
+      case HashCrackerScreenStateError(:final message):
         return ResultCard(
           error: true,
           title: message
@@ -126,11 +125,11 @@ class HashCrackerScreen extends HookConsumerWidget {
 
     final hashTextController = useTextEditingController();
     final pickedFilePath = useState<String?>(null);
-    final selectedAlgorithm = useState(AlgorithmType.unknown);
+    final selectedAlgorithm = useState(HashAlgorithmType.unknown);
 
     final wordListManager = ref.read(wordListManagerProvider);
-    final notifier = ref.read(homeStateStateNotifier.notifier);
-    final state = ref.watch(homeStateStateNotifier);
+    final notifier = ref.read(hashCrackerScreenStateNotifier.notifier);
+    final state = ref.watch(hashCrackerScreenStateNotifier);
 
     return Scaffold(
       body: Padding(
@@ -149,7 +148,7 @@ class HashCrackerScreen extends HookConsumerWidget {
             const SizedBox(height: 16),
             HashAlgorithmSelector(
               label: "Select hash algorithm",
-              onChanged: (type) => selectedAlgorithm.value = type ?? AlgorithmType.unknown,
+              onChanged: (type) => selectedAlgorithm.value = type ?? HashAlgorithmType.unknown,
               value: selectedAlgorithm.value,
             ),
             const SizedBox(height: 16),
@@ -195,16 +194,16 @@ class HashCrackerScreen extends HookConsumerWidget {
         onPressed: () async { 
           
           final hash = hashTextController.text.trim();
-          AlgorithmType algorithmType = selectedAlgorithm.value;
+          HashAlgorithmType algorithmType = selectedAlgorithm.value;
 
-          if(algorithmType == AlgorithmType.unknown) {
-            algorithmType = ref.read(hasherProvider).identifyAlgorithm(hash);
+          if(algorithmType == HashAlgorithmType.unknown) {
+            algorithmType = notifier.identifyHash(hash);
 
-            if(algorithmType == AlgorithmType.unknown){
+            if(algorithmType == HashAlgorithmType.unknown){
 
               if(!context.mounted) return;
 
-              showErrorSnackBar(context, "Unable to detect the hashing alogrithm.");
+              showErrorSnackBar(context, "Unable to detect the hashing algorithm.");
               return;
             }
           }
