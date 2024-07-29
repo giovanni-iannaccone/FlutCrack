@@ -1,14 +1,14 @@
 import 'dart:io';
 
+import 'package:flut_crack/core/data/word_list_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flut_crack/features/hashing/presentation/state/hash_cracker_screen_state_notifier.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
-import 'package:flut_crack/features/wordlists/presentation/state/word_list_manager_provider.dart';
 import 'package:flut_crack/common_widgets/dialog_widget.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
-import 'package:flut_crack/core/utils/snackbar_utils.dart' show showErrorSnackBar, showSnackBar;
+import 'package:flut_crack/core/utils/snackbar_utils.dart';
 
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/services.dart';
@@ -208,11 +208,7 @@ class HashCrackerScreen extends HookConsumerWidget {
             }
           }
           
-          File? path = pickedFilePath.value != null
-            ? File(pickedFilePath.value!)
-            : null;
-
-          final wordList = await wordListManager.loadWordList(path!);
+          final wordList = await wordListManager.loadWordList(pickedFilePath.value!);
           await notifier.crackHash(hash, wordList, algorithmType);        
         },
         child: const Icon(Icons.vpn_key),

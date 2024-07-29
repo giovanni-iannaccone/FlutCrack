@@ -16,15 +16,15 @@ class WordListManager {
 
   Future<void> createNewWordList(String name) async {
     final file = await _getFile(name);
-    file.create();
+    await file.create();
   }
 
   Future<void> deleteWordList(String name) async {
     final file = await _getFile(name);
-    file.delete();
+    await file.delete();
   }
 
-  Future<List<String>> getDictionariesNames() async {
+  Future<List<String>> getWordListsNames() async {
     final directory = Directory(await _localPath);
 
     return await directory.list(recursive: false)
@@ -51,7 +51,7 @@ class WordListManager {
     final path = await _localPath;
     final file = await _getFile(oldName);
 
-    file.rename("$path/$newName");
+    await file.rename("$path/$newName");
   }
 }
 

@@ -1,6 +1,6 @@
 import 'package:flut_crack/features/hashing/presentation/hash_cracker_screen.dart';
 import 'package:flut_crack/features/hashing/presentation/hasher_screen.dart';
-import 'package:flut_crack/features/wordlists/presentation/manage_wordlists.dart';
+import 'package:flut_crack/features/wordlists/presentation/word_lists_screen.dart';
 import 'package:flut_crack/core/utils/navigation_utils.dart';
 import 'package:flut_crack/app_routes.dart' as routes;
 

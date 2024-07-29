@@ -1,11 +1,11 @@
 import 'package:flut_crack/features/hashing/presentation/hasher_screen.dart';
-import 'package:flut_crack/features/wordlists/presentation/manage_wordlists.dart';
+import 'package:flut_crack/features/wordlists/presentation/word_lists_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flut_crack/features/hashing/presentation/home_screen.dart';
 import 'package:flut_crack/features/about/presentation/aboutus_screen.dart';
-import 'package:flut_crack/features/wordlists/presentation/dictionary_screen.dart';
+import 'package:flut_crack/features/wordlists/presentation/edit_word_list_screen.dart';
 import 'package:flut_crack/features/hashing/presentation/hash_cracker_screen.dart';
 
 import 'app_routes.dart' as routes;
@@ -35,7 +35,7 @@ class FlutCrack extends StatelessWidget {
       routes: {
         routes.home: (context) => const HomeScreen(),
         routes.hashCracker: (context) => const HashCrackerScreen(),
-        routes.editWordList: (context) => const DictionaryScreen(),
+        routes.editWordList: (context) => const EditWordListScreen(),
         routes.about: (context) => const AboutUsScreen(),
         routes.manageWordLists: (context) => const WordListsScreen(),
         routes.hasher: (context) => const HasherScreen()
