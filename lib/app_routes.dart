@@ -1,6 +1,6 @@
 const String home = '/';
-const String hashCracker = '/hashCracker';
-const String hasher = 'hasher';
-const String dictionary = '/edit';
-const String aboutUs = '/aboutus';
-const String manageWordlists = '/manageWordlists';
+const String hashCracker = '/hash-cracker';
+const String hasher = '/hasher';
+const String editWordList = '/edit';
+const String about = '/aboutus';
+const String manageWordLists = '/manage-wordlists';
