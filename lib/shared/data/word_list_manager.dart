@@ -9,18 +9,18 @@ class WordListManager {
     return directory.path;
   }
 
-  Future<File> _getFile(String name) async {
+  Future<File> _getLocalFile(String name) async {
     final path = await localPath;
     return File("$path/$name");
   }
 
   Future<void> createNewWordList(String name) async {
-    final file = await _getFile(name);
+    final file = await _getLocalFile(name);
     await file.create();
   }
 
   Future<void> deleteWordList(String name) async {
-    final file = await _getFile(name);
+    final file = await _getLocalFile(name);
     await file.delete();
   }
 
@@ -34,7 +34,7 @@ class WordListManager {
   }
 
   Future<void> addWordsToWordList(String name, List<String> words) async {
-    final file = await _getFile(name);
+    final file = await _getLocalFile(name);
 
     await file.writeAsString(
       words.join('\n'), 
@@ -42,14 +42,19 @@ class WordListManager {
     );
   }
 
-  Future<List<String>> loadWordList(String name) async {
-    final file = await _getFile(name);
+  Future<List<String>> loadLocalWordList(String name) async {
+    final file = await _getLocalFile(name);
+    return await file.readAsLines();
+  }
+
+  Future<List<String>> loadExternalWordList(String path) async {
+    final file = File(path);
     return await file.readAsLines();
   }
 
   Future<void> renameWordList(String oldName, String newName) async {
     final path = await localPath;
-    final file = await _getFile(oldName);
+    final file = await _getLocalFile(oldName);
 
     await file.rename("$path/$newName");
   }
