@@ -1,12 +1,11 @@
 import 'dart:io';
 
-import 'package:flut_crack/core/data/word_list_manager.dart';
 import 'package:flutter/material.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flut_crack/features/hashing/presentation/state/hash_cracker_screen_state_notifier.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
-import 'package:flut_crack/common_widgets/dialog_widget.dart';
+import 'package:flut_crack/features/hashing/presentation/widgets/dialog_widget.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
 import 'package:flut_crack/core/utils/snackbar_utils.dart';
 
@@ -20,21 +19,19 @@ import 'package:permission_handler/permission_handler.dart';
 class HashCrackerScreen extends HookConsumerWidget {
   const HashCrackerScreen({super.key});
 
-  Future<void> _pickWordlistFile({
+  Future<void> _pickWordListFile({
     required void Function(XFile) onSuccess,
     required void Function(String error) onError,
-    required wordListManager
   }) async {
 
     const XTypeGroup typeGroup = XTypeGroup(
       label: 'text',
-      extensions: <String>['txt'],
+      extensions: ['txt'],
     );
 
     try {
       final XFile? result = await openFile(
-        acceptedTypeGroups: <XTypeGroup>[typeGroup],
-        initialDirectory: await wordListManager.localPath
+        acceptedTypeGroups: <XTypeGroup>[typeGroup]
       );
   
       if(result == null){
@@ -127,9 +124,8 @@ class HashCrackerScreen extends HookConsumerWidget {
     final pickedFilePath = useState<String?>(null);
     final selectedAlgorithm = useState(HashAlgorithmType.unknown);
 
-    final wordListManager = ref.read(wordListManagerProvider);
-    final notifier = ref.read(hashCrackerScreenStateNotifier.notifier);
-    final state = ref.watch(hashCrackerScreenStateNotifier);
+    final notifier = ref.read(hashCrackerScreenNotifier.notifier);
+    final state = ref.watch(hashCrackerScreenNotifier);
 
     return Scaffold(
       body: Padding(
@@ -159,14 +155,11 @@ class HashCrackerScreen extends HookConsumerWidget {
                 context: context,
                 builder: (BuildContext context) {
                   return DialogWidget(
-                    context: context,
-                    
                     onFilePick: () async => await _requestPermission(
                       permission: Permission.storage, 
-                      onGranted: () => _pickWordlistFile(
+                      onGranted: () async => _pickWordListFile(
                         onSuccess: (file) => pickedFilePath.value = file.path,
-                        onError: (error) => showErrorSnackBar(context, error),
-                        wordListManager: wordListManager
+                        onError: (error) => showErrorSnackBar(context, error)
                       ), 
                       onDenied: () {
                         if(context.mounted){
@@ -177,7 +170,9 @@ class HashCrackerScreen extends HookConsumerWidget {
                         }
                       }
                     ),
-                    onWordListPick: () => {}
+                    onWordListPick: () => {
+                      // TODO
+                    }
                   );
                 }
               ),
@@ -207,9 +202,13 @@ class HashCrackerScreen extends HookConsumerWidget {
               return;
             }
           }
-          
-          final wordList = await wordListManager.loadWordList(pickedFilePath.value!);
-          await notifier.crackHash(hash, wordList, algorithmType);        
+
+          if(pickedFilePath.value == null){
+            showErrorSnackBar(context, "Choose a word list.");
+            return;
+          }
+
+          notifier.crackHash(hash, pickedFilePath.value!, algorithmType);        
         },
         child: const Icon(Icons.vpn_key),
       ),

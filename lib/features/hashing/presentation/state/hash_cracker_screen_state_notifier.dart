@@ -1,3 +1,4 @@
+import 'package:flut_crack/features/hashing/domain/usecases/load_word_list_use_case.dart';
 import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flut_crack/features/hashing/domain/usecases/bruteforce_hash_use_case.dart';
 import 'package:flut_crack/features/hashing/domain/usecases/identify_hash_use_case.dart';
@@ -40,15 +41,18 @@ class HashCrackerScreenNotifier extends StateNotifier<HashCrackerScreenState> {
 
   final IdentifyHashUseCase identifyHashUseCase;
   final BruteforceHashUseCase bruteforceHashUseCase;
+  final LoadWordListUseCase loadWordListUseCase;
 
   HashCrackerScreenNotifier({
     required this.bruteforceHashUseCase,
-    required this.identifyHashUseCase
+    required this.identifyHashUseCase,
+    required this.loadWordListUseCase
   }) : super(HashCrackerScreenState.idle());
 
-  Future<void> crackHash(String hash, List<String> wordList, HashAlgorithmType algorithm) async {
+  Future<void> crackHash(String hash, String wordListName, HashAlgorithmType algorithm) async {
     state = HashCrackerScreenState.loading();
 
+    final wordList = await loadWordListUseCase(wordListName);
     final result = await bruteforceHashUseCase(
       BruteforceHashUseCaseParams(
         hash: hash,
@@ -67,14 +71,16 @@ class HashCrackerScreenNotifier extends StateNotifier<HashCrackerScreenState> {
   }
 }
 
-final hashCrackerScreenStateNotifier =
+final hashCrackerScreenNotifier =
   StateNotifierProvider.autoDispose<HashCrackerScreenNotifier, HashCrackerScreenState>((ref){
     final bruteforceUseCase = ref.watch(bruteforceHashUseCaseProvider);
     final identifyUseCase = ref.watch(identifyHashUseCaseProvider);
+    final loadWordListUseCase = ref.read(loadWordListUseCaseProvider);
 
     return HashCrackerScreenNotifier(
       bruteforceHashUseCase: bruteforceUseCase,
-      identifyHashUseCase: identifyUseCase
+      identifyHashUseCase: identifyUseCase,
+      loadWordListUseCase: loadWordListUseCase
     );
   });
 

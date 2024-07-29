@@ -1,5 +1,6 @@
-import 'package:flut_crack/core/data/word_list_manager.dart';
+import 'package:flut_crack/shared/data/word_list_manager.dart';
 import 'package:flut_crack/core/use_case.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 
 class LoadWordListUseCase extends UseCase<String, Future<List<String>>> {
 
@@ -12,3 +13,8 @@ class LoadWordListUseCase extends UseCase<String, Future<List<String>>> {
     return await _wordListManager.loadWordList(params);
   }
 }
+
+final loadWordListUseCaseProvider = Provider((ref){
+  final wordListManager = ref.read(wordListManagerProvider);
+  return LoadWordListUseCase(wordListManager);
+});

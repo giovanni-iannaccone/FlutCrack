@@ -4,13 +4,13 @@ import 'package:path_provider/path_provider.dart';
 
 class WordListManager {
 
-  Future<String> get _localPath async {
+  Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
   }
 
   Future<File> _getFile(String name) async {
-    final path = await _localPath;
+    final path = await localPath;
     return File("$path/$name");
   }
 
@@ -25,7 +25,7 @@ class WordListManager {
   }
 
   Future<List<String>> getWordListsNames() async {
-    final directory = Directory(await _localPath);
+    final directory = Directory(await localPath);
 
     return await directory.list(recursive: false)
       .where((entity) => entity is File)
@@ -48,7 +48,7 @@ class WordListManager {
   }
 
   Future<void> renameWordList(String oldName, String newName) async {
-    final path = await _localPath;
+    final path = await localPath;
     final file = await _getFile(oldName);
 
     await file.rename("$path/$newName");

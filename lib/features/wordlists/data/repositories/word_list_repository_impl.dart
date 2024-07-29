@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flut_crack/core/data/word_list_manager.dart';
+import 'package:flut_crack/shared/data/word_list_manager.dart';
 import 'package:flut_crack/features/wordlists/domain/repositories/word_list_repository.dart';
 
 class WordListRepositoryImpl implements WordListRepository {

@@ -1,4 +1,4 @@
-import 'package:flut_crack/core/data/word_list_manager.dart';
+import 'package:flut_crack/shared/data/word_list_manager.dart';
 import 'package:flut_crack/features/wordlists/data/repositories/word_list_repository_impl.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 

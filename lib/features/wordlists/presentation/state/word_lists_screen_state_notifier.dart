@@ -69,10 +69,10 @@ class WordListsScreenNotifier extends StateNotifier<WordListsScreenState> {
     final deleted = await deleteWordListUseCase(name);
 
     if(deleted) {
-      state = WordListsScreenState.deleteWordListFail(wordLists);
-    } else {
       wordLists.remove(name);
       state = WordListsScreenState.deleteWordListSuccess(wordLists);
+    } else {
+      state = WordListsScreenState.deleteWordListFail(wordLists);
     }
   }
 
@@ -86,10 +86,10 @@ class WordListsScreenNotifier extends StateNotifier<WordListsScreenState> {
     final created = await createWordListUseCase(fileName);
 
     if(created) {
-      state = WordListsScreenState.createWordListFail(wordLists);
-    } else {
       wordLists.add(fileName);
       state = WordListsScreenState.createWordListSuccess(wordLists);
+    } else {
+      state = WordListsScreenState.createWordListFail(wordLists);
     }
   }
 
