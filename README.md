@@ -81,7 +81,6 @@ You may need to allow installations from unknown sources. This can be done by go
 - [x] Cleaner code
 - [x] New UI
 - [x] Multiple wordlists support
-- [ ] Salted hash ( maybe )
 
 ## 🧩 Contributing
 We welcome contributions! Please follow these steps:
@@ -92,6 +91,33 @@ We welcome contributions! Please follow these steps:
 4. Push your changes to your fork.
 5. Create a pull request to the main repository.
 
+### 📂 Folder Structure 
+```
+.
+├── core/                                Core components
+│   └── utils/                           Common utils files 
+├── features/                            Everything which isn't a common function
+│   ├── about/                           About Us screen stuff
+│   │   └── presentation/                The about us Screen
+│   ├── hashing/                         Hashing screens stuff
+│   │   ├── data/                        Data management for hashing 
+│   │   ├── domain/                      Logic for hashing functions
+│   │   │   ├── entities/                Algorithms and hashing functions
+│   │   │   ├── repositories/            Implementations to access hashing data  
+│   │   │   └── usecases/                Use cases for hashing 
+│   │   └── presentation/                Hashing screens
+│   │       ├── state/                   Hashing screens state notifier
+│   │       └── widgets/                 Widget for hashing screens
+│   └── wordlists/                       Wordlists screens stuff
+│       ├── data/                        Data management for wordlists
+│       ├── domain/                      Logic for wordlists related functions
+│       │   ├── repositories/            Implementations to access wordlists data  
+│       │   └── usecases/                Use cases for wordlists
+│       └── presentation/                Wordlists screens
+│           └── state/                   Wordlists screens state notifier
+└── shared/data/                         classes to manage things
+```
+                 
 ### 🍃 Contributors
 <a href="https://github.com/giovanni-iannaccone/FlutCrack/graphs/contributors">
   <img src="https://contrib.rocks/image?repo=giovanni-iannaccone/FlutCrack"  alt="FLutCrack Contributors"/>
@@ -111,10 +137,10 @@ ub.io" target=”_blank” rel="noopener noreferrer"> https://giovanni-iannaccon
 
 ## 📸 Screenshots
 <div style="display: grid;">
-  <img src="https://github.com/user-attachments/assets/a331e5d6-10c1-4b03-b4ef-f969d033407d" style="height: 500px;"/>
-  <img src="https://github.com/user-attachments/assets/48553040-19d9-4651-b7b1-5aae4a326db2" style="height: 500px;"/>
-  <img src="https://github.com/user-attachments/assets/a061db0d-77a1-4a0d-9a20-ae5d22b583df" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/c08458e7-e23b-492c-be6b-9c6004bae73b" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/c880ae05-2698-46bb-a434-1163c0e79cc3" style="height: 500px;"/>
+  <img src="https://github.com/user-attachments/assets/9f843bd6-9d15-4709-a9c9-4b0addcffc36" style="height: 500px;"/>
 </div>
-
+<br>
 
 🚀 Happy Hacking ... 
