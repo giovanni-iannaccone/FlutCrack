@@ -1,6 +1,7 @@
-const String home = '/';
+const String about = '/aboutus';
 const String hashCracker = '/hash-cracker';
 const String hasher = '/hasher';
 const String editWordList = '/edit';
-const String about = '/aboutus';
+const String home = '/';
 const String manageWordLists = '/manage-wordlists';
+const String wordListChoice = '/word-list-choice';

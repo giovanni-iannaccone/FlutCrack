@@ -31,8 +31,8 @@ class DialogWidget extends StatelessWidget {
             const SizedBox(height: 15),
             ElevatedButton.icon(
               onPressed: () {
+                Navigator.of(context).pop();
                 onWordListPick();
-                Navigator.of(context).pop(context);
               },
               icon: const Icon(Icons.file_open),
               label: const Text('Use a in-app created wordlist'),

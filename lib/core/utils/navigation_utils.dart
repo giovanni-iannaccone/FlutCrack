@@ -7,16 +7,16 @@ Future<T?> navigateTo<T>(
     popOldRoutes = false, 
     Object? arguments
   }
-){
+) async {
   final navigator = Navigator.of(context);
 
   return popOldRoutes
-    ? navigator.pushNamedAndRemoveUntil(
+    ? await navigator.pushNamedAndRemoveUntil(
         route, 
         (_) => false,
         arguments: arguments
       )
-    : navigator.pushNamed(
+    : await navigator.pushNamed(
         route, 
         arguments: arguments
       );
