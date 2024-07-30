@@ -43,7 +43,7 @@ class HasherScreen extends HookConsumerWidget {
             const SizedBox(height: 32),
             (result.value == null)
               ? const Text(
-                "Enter a hash to start",
+                "Enter a word to start",
                 style: TextStyle(
                   color: Colors.grey
                 )

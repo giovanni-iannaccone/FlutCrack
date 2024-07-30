@@ -1,17 +1,20 @@
 import 'dart:io';
 
-import 'package:flutter/material.dart';
-import 'package:device_info_plus/device_info_plus.dart';
+import 'package:flut_crack/app_routes.dart' as routes;
+import 'package:flut_crack/core/utils/navigation_utils.dart';
+import 'package:flut_crack/core/utils/snackbar_utils.dart';
 import 'package:flut_crack/features/hashing/domain/entities/hash_algorithm_type.dart';
 import 'package:flut_crack/features/hashing/presentation/state/hash_cracker_screen_state_notifier.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/dialog_widget.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
-import 'package:flut_crack/core/utils/snackbar_utils.dart';
+import 'package:flut_crack/shared/data/word_list_manager.dart';
 
-import 'package:file_selector/file_selector.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'package:device_info_plus/device_info_plus.dart';
+import 'package:file_selector/file_selector.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -170,14 +173,18 @@ class HashCrackerScreen extends HookConsumerWidget {
                         }
                       }
                     ),
-                    onWordListPick: () => {
-                      // TODO
+                    onWordListPick: () async => {
+                      await navigateTo(context, 
+                        routes.wordListChoice, 
+                        arguments: pickedFilePath
+                      ),
+                      pickedFilePath.value = "${await WordListManager().localPath}/${pickedFilePath.value!}",
                     }
                   );
                 }
               ),
               icon: const Icon(Icons.folder_open),
-              label: Text(pickedFilePath.value ?? "Pick a wordlist"),
+              label: Text((pickedFilePath.value ?? "Pick a wordlist").split('/').last),
               style: ElevatedButton.styleFrom(
                 padding: const EdgeInsets.all(20),
               ),

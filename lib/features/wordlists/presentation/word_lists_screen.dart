@@ -1,5 +1,6 @@
 import 'package:flut_crack/core/utils/navigation_utils.dart';
 import 'package:flut_crack/core/utils/snackbar_utils.dart';
+import 'package:flut_crack/core/utils/truncate_utils.dart';
 import 'package:flut_crack/features/wordlists/presentation/state/word_lists_screen_state_notifier.dart';
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
@@ -19,12 +20,6 @@ class WordListItem extends StatelessWidget {
     required this.onDeletePressed
   });
 
-  String _truncateFileName(String fileName, [int maxLength = 20]) {
-    return fileName.length > maxLength
-      ? "${fileName.substring(0, maxLength)}..."
-      : fileName;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -32,7 +27,7 @@ class WordListItem extends StatelessWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Text(_truncateFileName(wordListName)),
+          Text(truncateFileName(wordListName)),
           Wrap(
             children: [
               IconButton(
