@@ -8,7 +8,6 @@ import 'package:flut_crack/features/hashing/presentation/state/hash_cracker_scre
 import 'package:flut_crack/features/hashing/presentation/widgets/result_card.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/dialog_widget.dart';
 import 'package:flut_crack/features/hashing/presentation/widgets/hash_algorithm_selector.dart';
-import 'package:flut_crack/shared/data/word_list_manager.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -173,13 +172,11 @@ class HashCrackerScreen extends HookConsumerWidget {
                         }
                       }
                     ),
-                    onWordListPick: () async => {
-                      await navigateTo(context, 
-                        routes.wordListChoice, 
-                        arguments: pickedFilePath
-                      ),
-                      pickedFilePath.value = "${await WordListManager().localPath}/${pickedFilePath.value!}",
-                    }
+                    onWordListPick: () async => await navigateTo(
+                      context, 
+                      routes.wordListChoice, 
+                      arguments: pickedFilePath
+                    )
                   );
                 }
               ),
