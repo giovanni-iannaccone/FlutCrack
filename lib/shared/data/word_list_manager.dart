@@ -42,13 +42,14 @@ class WordListManager {
     );
   }
 
-  Future<List<String>> loadLocalWordList(String name) async {
-    final file = await _getLocalFile(name);
-    return await file.readAsLines();
-  }
+  Future<List<String>> loadWordList(String fileName) async {
 
-  Future<List<String>> loadExternalWordList(String path) async {
-    final file = File(path);
+    var file = File(fileName);
+
+    if(file.parent.path == '.'){
+      file = await _getLocalFile(fileName);
+    }
+    
     return await file.readAsLines();
   }
 

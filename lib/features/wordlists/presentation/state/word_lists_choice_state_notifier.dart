@@ -1,49 +1,37 @@
+import 'package:flut_crack/core/use_case.dart';
+import 'package:flut_crack/features/wordlists/domain/usecases/get_word_lists_use_case.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
-import 'package:flut_crack/shared/data/word_list_manager.dart';
 
-class WordListsState {
-  final List<String> wordLists;
-  final List<String> filteredWordLists;
-  final bool isLoading;
+class WordListsNotifier extends StateNotifier<List<String>> {
+  
+  final GetWordListsUseCase getWordListsUseCase;
+  
+  WordListsNotifier(this.getWordListsUseCase) : super([]) {
+    _fetchWordLists();
+  }
 
-  WordListsState({
-    required this.wordLists,
-    required this.filteredWordLists,
-    required this.isLoading,
+  Future<void> _fetchWordLists() async {
+    state = await getWordListsUseCase(UseCaseNoParams());
+  }
+
+  Future<void> filterWordLists(String query) async {
+    if(query.isEmpty){
+      await _fetchWordLists();
+      return;
+    }
+
+    state = state
+      .where((wordList) => 
+        wordList
+          .toLowerCase()
+          .contains(query.toLowerCase())
+      )
+      .toList();
+  }
+}
+
+final wordListsNotifierProvider = 
+  StateNotifierProvider.autoDispose<WordListsNotifier, List<String>>((ref) {
+    final getWordListsUseCase = ref.read(getWordListsUseCaseProvider);
+    return WordListsNotifier(getWordListsUseCase);
   });
-
-  WordListsState copyWith({
-    List<String>? wordLists,
-    List<String>? filteredWordLists,
-    bool? isLoading,
-  }) {
-    return WordListsState(
-      wordLists: wordLists ?? this.wordLists,
-      filteredWordLists: filteredWordLists ?? this.filteredWordLists,
-      isLoading: isLoading ?? this.isLoading,
-    );
-  }
-}
-
-class WordListsNotifier extends StateNotifier<WordListsState> {
-  WordListsNotifier() : super(WordListsState(wordLists: [], filteredWordLists: [], isLoading: true)) {
-    _loadWordLists();
-  }
-
-  Future<void> _loadWordLists() async {
-    await Future.delayed(const Duration(seconds: 1));
-    final wordLists = await  WordListManager().getWordListsNames();
-    state = state.copyWith(wordLists: wordLists, filteredWordLists: wordLists, isLoading: false);
-  }
-
-  void filterWordLists(String searchText) {
-    final filtered = state.wordLists.where((wordList) {
-      return wordList.toLowerCase().contains(searchText.toLowerCase());
-    }).toList();
-    state = state.copyWith(filteredWordLists: filtered);
-  }
-}
-
-final wordListsNotifierProvider = StateNotifierProvider<WordListsNotifier, WordListsState>((ref) {
-  return WordListsNotifier();
-});
