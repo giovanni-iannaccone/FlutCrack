@@ -1,6 +1,6 @@
 ![logo-black-resized](https://github.com/user-attachments/assets/6a6c9558-8fa6-41ff-a49c-3be695e92208)
 
-<a href="https://github.com/giovanni-iannaccone/FlutCrack"> This </a> is the official repository of the FlutCrack app.
+<a href="https://github.com/giovanni-iannaccone/FlutCrack"> This </a> is the official repository of the FlutCrack app. 
 # 👋 FlutCrack
 
 FlutCrack is a Flutter application designed to crack hashes by comparing them against a dictionary of words.
@@ -75,6 +75,9 @@ You may need to allow installations from unknown sources. This can be done by go
 5. Select the hash algorithm from the dropdown menu (if you know it).
 6. Press the action button to start the cracking process.
 7. The result will be displayed below the input fields.
+
+> [!CAUTION]
+> The FlutCrack team does not assume any responsibility for the improper use of the app.
 
 ## 🎬 Coming Soon
 - [x] Hash identifying  
