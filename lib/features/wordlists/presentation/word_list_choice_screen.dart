@@ -42,7 +42,7 @@ class WordListChoiceScreen extends HookConsumerWidget {
                       pickedFilePath.value = wordListsState[index];
                       Navigator.of(context).pop();
                     },
-                    child: Text(truncateFileName(wordListsState[index], 25)),
+                    child: Text(truncateFileName(wordListsState[index].split('/').last, 25)),
                   ),
                 ),
               ),

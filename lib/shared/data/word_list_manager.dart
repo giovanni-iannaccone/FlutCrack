@@ -19,8 +19,8 @@ class WordListManager {
     await file.create();
   }
 
-  Future<void> deleteWordList(String name) async {
-    final file = await _getLocalFile(name);
+  Future<void> deleteWordList(path) async {
+    final file = File(path);
     await file.delete();
   }
 
@@ -29,7 +29,7 @@ class WordListManager {
 
     return await directory.list(recursive: false)
       .where((entity) => entity is File)
-      .map((entity) => entity.path.split('/').last)
+      .map((entity) => entity.path)
       .toList();
   }
 
@@ -42,14 +42,8 @@ class WordListManager {
     );
   }
 
-  Future<List<String>> loadWordList(String fileName) async {
-
-    var file = File(fileName);
-
-    if(file.parent.path == '.'){
-      file = await _getLocalFile(fileName);
-    }
-    
+  Future<List<String>> loadWordList(String filePath) async {
+    var file = File(filePath);    
     return await file.readAsLines();
   }
 
