@@ -39,7 +39,7 @@ class WordListChoiceScreen extends HookConsumerWidget {
                   padding: const EdgeInsets.all(10),
                   child: TextButton(
                     onPressed: () {
-                      pickedFilePath.value = wordListsState[index].split('/').last;
+                      pickedFilePath.value = wordListsState[index];
                       Navigator.of(context).pop();
                     },
                     child: Text(truncateFileName(wordListsState[index].split('/').last, 25)),
