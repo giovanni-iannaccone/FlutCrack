@@ -197,7 +197,8 @@ class HashCrackerScreen extends HookConsumerWidget {
 
           if(algorithmType == HashAlgorithmType.unknown) {
             algorithmType = notifier.identifyHash(hash);
-
+            selectedAlgorithm.value = algorithmType;
+            
             if(algorithmType == HashAlgorithmType.unknown){
 
               if(!context.mounted) return;

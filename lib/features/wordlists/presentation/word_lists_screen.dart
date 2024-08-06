@@ -103,17 +103,17 @@ class WordListsScreen extends HookConsumerWidget {
                 child: ListView.builder(
                   itemCount: wordListsScreenState.wordLists.length,
                   itemBuilder: (context, index) => WordListItem(
-                    wordListName: wordListsScreenState.wordLists[index], 
+                    wordListName: wordListsScreenState.wordLists[index].split('/').last, 
                     onEditPressed: () => navigateTo(
                       context, 
                       routes.editWordList,
-                      arguments: wordListsScreenState.wordLists[index],
+                      arguments: wordListsScreenState.wordLists[index].split('/').last,
                     ).whenComplete(
                       () => notifier.loadWordListsName()
                     ),
                     onDeletePressed: () {
-                      final name = wordListsScreenState.wordLists[index];
-                      notifier.deleteWordList(name);
+                      final path = wordListsScreenState.wordLists[index];
+                      notifier.deleteWordList(path);
                     }
                   ),
                 ),
