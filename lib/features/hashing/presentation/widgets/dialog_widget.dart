@@ -4,11 +4,13 @@ class DialogWidget extends StatelessWidget {
   
   final void Function() onFilePick;
   final void Function() onWordListPick;
+  final void Function() onNetworkPick;
   
   const DialogWidget({
     super.key,
     required this.onFilePick,
-    required this.onWordListPick  
+    required this.onWordListPick,
+    required this.onNetworkPick,
   });
 
   @override
@@ -37,6 +39,15 @@ class DialogWidget extends StatelessWidget {
               icon: const Icon(Icons.file_open),
               label: const Text('Use a in-app created wordlist'),
             ),
+            const SizedBox(height: 15),
+            ElevatedButton.icon(
+              onPressed: () {
+                Navigator.of(context).pop();
+                onNetworkPick();
+              },
+              icon: const Icon(Icons.download),
+              label: const Text('Use an online wordlist'),
+            )
           ],
         ),
       )

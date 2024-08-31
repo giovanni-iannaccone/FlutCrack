@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:path_provider/path_provider.dart';
 
 class WordListManager {
-
+  
   Future<String> get localPath async {
     final directory = await getApplicationDocumentsDirectory();
     return directory.path;
@@ -19,7 +19,7 @@ class WordListManager {
     await file.create();
   }
 
-  Future<void> deleteWordList(path) async {
+  Future<void> deleteWordList(String path) async {
     final file = File(path);
     await file.delete();
   }
@@ -43,8 +43,13 @@ class WordListManager {
   }
 
   Future<List<String>> loadWordList(String filePath) async {
-    var file = File(filePath);    
-    return await file.readAsLines();
+    try {
+      var file = File(filePath);    
+      return await file.readAsLines();
+    } catch(e) {
+      var file = await _getLocalFile(filePath);
+      return file.readAsLines();
+    }
   }
 
   Future<void> renameWordList(String oldName, String newName) async {

@@ -7,6 +7,7 @@ abstract class WordListRepository {
 
   Future<bool> createEmptyWordList(String name);
   Future<bool> deleteWordList(String name);
+  Future<bool> downloadWordList(String link);
   Future<bool> renameWordList(String currentName, String newName);
   Future<bool> appendWordsTo(String wordListName, List<String> words);
 }

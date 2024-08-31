@@ -1,6 +1,7 @@
 import 'package:flut_crack/features/hashing/presentation/hasher_screen.dart';
 import 'package:flut_crack/features/wordlists/presentation/word_lists_screen.dart';
 import 'package:flut_crack/features/wordlists/presentation/word_list_choice_screen.dart';
+import 'package:flut_crack/features/wordlists/presentation/network_word_list_choice_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -40,6 +41,7 @@ class FlutCrack extends StatelessWidget {
         routes.hasher: (context) => const HasherScreen(),
         routes.home: (context) => const HomeScreen(),
         routes.manageWordLists: (context) => const WordListsScreen(),
+        routes.networkWordListChoice: (context) => const NetworkWordListChoiceScreen(),
         routes.wordListChoice: (context) => const WordListChoiceScreen()
       },
     );
