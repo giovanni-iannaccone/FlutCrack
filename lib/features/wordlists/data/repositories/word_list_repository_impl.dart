@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flut_crack/core/utils/http_utils.dart';
 import 'package:flut_crack/shared/data/word_list_manager.dart';
 import 'package:flut_crack/features/wordlists/domain/repositories/word_list_repository.dart';
 
@@ -29,6 +30,22 @@ class WordListRepositoryImpl implements WordListRepository {
   @override
   Future<List<String>> getAllWordListsNames() async {
     return await _wordListManager.getWordListsNames();
+  }
+
+  @override
+  Future<bool> downloadWordList(String link) async {
+    final String wordListName = link.split('/').last;
+    final String? response = await getURLContent(link);
+    
+    if (response == null) {
+      return false;
+    }
+
+    List<String> words = response.split('\n');
+
+    return 
+      await createEmptyWordList(wordListName) &&
+      await appendWordsTo(wordListName, words);
   }
 
   @override

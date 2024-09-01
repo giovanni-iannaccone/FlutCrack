@@ -176,6 +176,11 @@ class HashCrackerScreen extends HookConsumerWidget {
                       context, 
                       routes.wordListChoice, 
                       arguments: pickedFilePath
+                    ),
+                    onNetworkPick: () async => await navigateTo(
+                      context,
+                      routes.networkWordListChoice,
+                      arguments: pickedFilePath
                     )
                   );
                 }
@@ -190,7 +195,7 @@ class HashCrackerScreen extends HookConsumerWidget {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () async { 
+        onPressed: () async {
           
           final hash = hashTextController.text.trim();
           HashAlgorithmType algorithmType = selectedAlgorithm.value;
