@@ -9,16 +9,42 @@ import 'package:flut_crack/features/wordlists/presentation/state/download_word_l
 class NetworkWordListChoiceScreen extends HookConsumerWidget {
   const NetworkWordListChoiceScreen({super.key});
 
+   void _handleState(BuildContext context, NetworkScreenState screenState) {
+    switch(screenState.state){
+      case NetworkConcreteState.downloadFailed:
+        showErrorSnackBar(context, "Use a valid URL or check you connection");
+        break;
+      case NetworkConcreteState.downloadSuccess:
+        showSnackBar(context, "Wordlist downloaded");
+        break;
+      default:
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
     final pickedFilePath = extractArguments<ValueNotifier<String?>>(context);  
     final wordListLinkController = useTextEditingController();
 
     final notifier = ref.read(downloadWordListScreenNotifierProvider.notifier);
+    final state = ref.watch(downloadWordListScreenNotifierProvider);
+
+    ref.listen<NetworkScreenState>(
+      downloadWordListScreenNotifierProvider,
+      (_, state) { 
+        _handleState(context, state);
+        if (state.state == NetworkConcreteState.downloadSuccess) {
+          pickedFilePath.value = wordListLinkController.text.split('/').last;
+          Navigator.of(context).pop();
+        }
+      }
+    );
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Use an online wordlist"),
+        title: const Text("Download an online wordlist"),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -27,7 +53,7 @@ class NetworkWordListChoiceScreen extends HookConsumerWidget {
             TextFormField(
               controller: wordListLinkController,
               decoration: const InputDecoration(
-                prefixIcon: Icon(Icons.download),
+                prefixIcon: Icon(Icons.link),
                 hintText: "Link of the wordlist",
                 border: OutlineInputBorder(),
               ),
@@ -35,17 +61,14 @@ class NetworkWordListChoiceScreen extends HookConsumerWidget {
             const SizedBox(height: 16),
             ElevatedButton.icon(
               onPressed: () {
-                if (wordListLinkController.text.isNotEmpty) {
-                  notifier.downloadWordList(wordListLinkController.text);
-                  pickedFilePath.value = wordListLinkController.text.split('/').last;
-                  Navigator.of(context).pop();
-                } else {
-                  showErrorSnackBar(context, "Use a valid url");
-                }
+                notifier.downloadWordList(wordListLinkController.text);
               },
-              label: const Text("Send request"),
-              icon: const Icon(Icons.arrow_right_alt)
+              label: const Text("Download"),
+              icon: const Icon(Icons.download)
             ),
+
+            if (state.state == NetworkConcreteState.downloading)
+              const CircularProgressIndicator(),
           ]
         )
       )

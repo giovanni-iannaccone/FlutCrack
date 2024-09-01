@@ -37,16 +37,15 @@ class WordListRepositoryImpl implements WordListRepository {
     final String wordListName = link.split('/').last;
     final String? response = await getURLContent(link);
     
-    if (response != null ) {
-      List<String> words = response.split('\n');
-
-      return 
-        await createEmptyWordList(wordListName) & 
-        await appendWordsTo(wordListName, words);
-
+    if (response == null) {
+      return false;
     }
 
-    return false;
+    List<String> words = response.split('\n');
+
+    return 
+      await createEmptyWordList(wordListName) &&
+      await appendWordsTo(wordListName, words);
   }
 
   @override
