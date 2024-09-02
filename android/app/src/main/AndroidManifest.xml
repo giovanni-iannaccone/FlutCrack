@@ -5,6 +5,7 @@
 
     <application
         android:requestLegacyExternalStorage="true"
+        android:testOnly="false"
         android:label="FlutCrack"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
