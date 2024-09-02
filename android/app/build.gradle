@@ -44,13 +44,6 @@ android {
         versionName = flutterVersionName
     }
 
-    dependenciesInfo {
-        // Disables dependency metadata when building APKs.
-        includeInApk = false
-        // Disables dependency metadata when building Android App Bundles.
-        includeInBundle = false
-    }
-
     buildTypes {
         release {
             // TODO: Add your own signing config for the release build.
