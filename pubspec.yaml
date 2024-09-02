@@ -3,7 +3,7 @@ description: "An hash cracker with flutter"
 
 publish_to: 'none'
 
-version: 1.0.0+1
+version: 2.1.0
 
 environment:
   sdk: '>=3.4.3 <4.0.0'
