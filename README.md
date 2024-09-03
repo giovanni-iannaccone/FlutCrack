@@ -1,4 +1,7 @@
 ![logo-black-resized](https://github.com/user-attachments/assets/6a6c9558-8fa6-41ff-a49c-3be695e92208)
+<a href="https://apt.izzysoft.de/fdroid/index/apk/com.example.flut_crack">
+  <img src="https://github.com/user-attachments/assets/e97336e4-886d-436e-916e-a601af11e3bb" alt="IzzySoft" style="width: 175px;">
+</a>
 
 <a href="https://github.com/giovanni-iannaccone/FlutCrack"> This </a> is the official repository of the FlutCrack app. 
 # 👋 FlutCrack
